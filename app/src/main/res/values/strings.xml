@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KYS</string>
+    <!--    Bottom Navigation Strings    -->
+    <string name="home">Ana Sayfam</string>
+    <string name="create_conf">Yeni Koferans</string>
+    <string name="profile">Profilim</string>
 </resources>
