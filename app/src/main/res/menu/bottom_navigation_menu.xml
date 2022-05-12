@@ -10,7 +10,7 @@
         android:id="@+id/createConf"
         android:enabled="true"
         android:icon="@drawable/ic_create_conf"
-        android:title="@string/create_conf" />
+        android:title="@string/conf" />
     <item
         android:id="@+id/profile"
         android:enabled="true"

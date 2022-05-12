@@ -10,4 +10,5 @@
     <color name="active_tab_color">#FFFF</color>
     <color name="inactive_tab_color">#000000</color>
     <color name="blue">#2c5784</color>
+    <color name="red">#FF0000</color>
 </resources>
