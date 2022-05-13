@@ -82,6 +82,28 @@
                     android:drawableEnd="@drawable/ic_conf_mail"/>
             </com.google.android.material.textfield.TextInputLayout>
             <!--            Konferans Tarih            -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confDateTextInputLayout"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/conference_date"
+                android:textColorHint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue"
+                app:endIconDrawable="@drawable/ic_conf_date"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:editable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
