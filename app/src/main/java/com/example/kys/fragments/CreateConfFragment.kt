@@ -2,9 +2,7 @@ package com.example.kys.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
 import kotlinx.android.synthetic.main.fragment_create_conf.view.*
@@ -37,6 +35,24 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
             }
         }
 
+        binding.apply {
+            confHourTextInputLayout.setEndIconOnClickListener {
+                val timePickerFragment = TimePickerFragment()
+                val supportFragmentManager = requireActivity().supportFragmentManager
+
+                supportFragmentManager.setFragmentResultListener(
+                    "REQUEST_KEY1",
+                    viewLifecycleOwner
+                ) { resultKey, bundle ->
+                    if (resultKey == "REQUEST_KEY1") {
+                        val time = bundle.getString("SELECTED_TIME")
+                        confHourTextInputLayout.confHourEditText.setText(time)
+                    }
+                }
+
+                timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
+            }
+        }
     }
 
     override fun onDestroyView() {

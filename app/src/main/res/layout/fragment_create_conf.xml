@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!--            Konferans Adı              -->
+            <!--            Conference Name             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confNameTextInputLayout"
                 style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -61,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp" />
             </com.google.android.material.textfield.TextInputLayout>
-            <!--            Koferans Mail            -->
+            <!--            Conference Mail             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confMailTextInputLayout"
                 style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -81,7 +81,7 @@
                     android:layout_height="55dp"
                     android:drawableEnd="@drawable/ic_conf_mail"/>
             </com.google.android.material.textfield.TextInputLayout>
-            <!--            Konferans Tarih            -->
+            <!--            Conference Date             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confDateTextInputLayout"
                 style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -104,7 +104,29 @@
                     android:layout_height="55dp"
                     android:editable="false"/>
             </com.google.android.material.textfield.TextInputLayout>
+            <!--            Conference Hour             -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confHourTextInputLayout"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/conference_hour"
+                android:textColorHint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue"
+                app:endIconDrawable="@drawable/ic_conf_hour"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confHourEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:editable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
 

@@ -10,6 +10,5 @@
     <string name="conference_mail">İletişim Mail</string>
     <string name="conference_required">Gerekli</string>
     <string name="conference_date">Konferans Tarihi</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="conference_hour">Konferans Saati</string>
 </resources>
