@@ -11,4 +11,39 @@
     <string name="conference_required">Gerekli</string>
     <string name="conference_date">Konferans Tarihi</string>
     <string name="conference_hour">Konferans Saati</string>
+    <string name="conference_duration">Koferans Süresi</string>
+    <!--    Conference Duration Times   -->
+    <string name="half_an_hour">30 Dakika</string>
+    <string name="three_quarter">45 Dakika</string>
+    <string name="a_hour">1 Saat</string>
+    <string name="a_hour_quarter">1 Saat 15 Dakika</string>
+    <string name="a_hour_half">1 Saat 30 Dakika</string>
+    <string name="a_hour_three_quarter">1 Saat 45 Dakika</string>
+    <string name="two_hour">2 Saat</string>
+    <string name="two_hour_quarter">2 Saat 15 Dakika</string>
+    <string name="two_hour_half">2 Saat 30 Dakika</string>
+    <string name="two_hour_three_quarter">2 Saat 45 Dakika</string>
+    <string name="three_hour">3 Saat</string>
+    <string name="three_hour_quarter">3 Saat 15 Dakika</string>
+    <string name="three_hour_half">3 Saat 30 Dakika</string>
+    <string name="three_hour_three_quarter">3 Saat 45 Dakika</string>
+    <string name="four_hour">4 Saat</string>
+    <string-array name="durations">
+        <item>30 Dakika</item>
+        <item>45 Dakika</item>
+        <item>1 Saat</item>
+        <item>1 Saat 15 Dakika</item>
+        <item>1 Saat 30 Dakika</item>
+        <item>1 Saat 45 Dakika</item>
+        <item>2 Saat</item>
+        <item>2 Saat 15 Dakika</item>
+        <item>2 Saat 30 Dakika</item>
+        <item>2 Saat 45 Dakika</item>
+        <item>3 Saat</item>
+        <item>3 Saat 15 Dakika</item>
+        <item>3 Saat 30 Dakika</item>
+        <item>3 Saat 45 Dakika</item>
+        <item>4 Saat</item>
+    </string-array>
+    <string name="conference_est_callers">Beklenen Katılımcı Sayısı</string>
 </resources>

@@ -30,7 +30,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="590dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,8 +54,7 @@
                 android:textColorHint="@color/black"
                 app:helperText="@string/conference_required"
                 app:helperTextTextColor="@color/red"
-                app:hintTextColor="@color/blue"
-                >
+                app:hintTextColor="@color/blue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confNameEditText"
@@ -79,7 +79,7 @@
                     android:id="@+id/confMailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:drawableEnd="@drawable/ic_conf_mail"/>
+                    android:drawableEnd="@drawable/ic_conf_mail" />
             </com.google.android.material.textfield.TextInputLayout>
             <!--            Conference Date             -->
             <com.google.android.material.textfield.TextInputLayout
@@ -91,18 +91,18 @@
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_date"
                 android:textColorHint="@color/black"
-                app:helperText="@string/conference_required"
-                app:helperTextTextColor="@color/red"
-                app:hintTextColor="@color/blue"
                 app:endIconDrawable="@drawable/ic_conf_date"
                 app:endIconMode="custom"
-                app:endIconTint="@color/black">
+                app:endIconTint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confDateEditText"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:editable="false"/>
+                    android:editable="false" />
             </com.google.android.material.textfield.TextInputLayout>
             <!--            Conference Hour             -->
             <com.google.android.material.textfield.TextInputLayout
@@ -114,18 +114,70 @@
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_hour"
                 android:textColorHint="@color/black"
-                app:helperText="@string/conference_required"
-                app:helperTextTextColor="@color/red"
-                app:hintTextColor="@color/blue"
                 app:endIconDrawable="@drawable/ic_conf_hour"
                 app:endIconMode="custom"
-                app:endIconTint="@color/black">
+                app:endIconTint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confHourEditText"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:editable="false"/>
+                    android:editable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--            Conference Duration         -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confDurationTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/transparent"
+                android:hint="@string/conference_duration"
+                android:textColorHint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue"
+                app:startIconDrawable="@drawable/ic_conf_duration"
+                app:startIconTint="@color/black">
+
+                <AutoCompleteTextView
+                    android:id="@+id/confDurationTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:backgroundTint="@color/transparent"
+                    android:inputType="none"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--            Estimated Callers           -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confEstTextInputLayout"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/conference_est_callers"
+                android:textColorHint="@color/black"
+                app:endIconDrawable="@drawable/ic_conf_est"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confEstEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:editable="false"
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/option_1"
+        android:title="@string/half_an_hour" />
+    <item android:id="@+id/option_2"
+        android:title="@string/three_quarter" />
+    <item android:id="@+id/option_3"
+        android:title="@string/a_hour" />
+    <item android:id="@+id/option_4"
+        android:title="@string/a_hour_quarter" />
+    <item android:id="@+id/option_5"
+        android:title="@string/a_hour_half" />
+    <item android:id="@+id/option_6"
+        android:title="@string/a_hour_three_quarter" />
+    <item android:id="@+id/option_7"
+        android:title="@string/two_hour" />
+    <item android:id="@+id/option_8"
+        android:title="@string/two_hour_quarter" />
+    <item android:id="@+id/option_9"
+        android:title="@string/two_hour_half" />
+    <item android:id="@+id/option_10"
+        android:title="@string/two_hour_three_quarter" />
+    <item android:id="@+id/option_11"
+        android:title="@string/three_hour" />
+    <item android:id="@+id/option_12"
+        android:title="@string/three_hour_quarter" />
+    <item android:id="@+id/option_13"
+        android:title="@string/three_hour_half" />
+    <item android:id="@+id/option_14"
+        android:title="@string/three_hour_three_quarter" />
+    <item android:id="@+id/option_15"
+        android:title="@string/four_hour" />
+</menu>

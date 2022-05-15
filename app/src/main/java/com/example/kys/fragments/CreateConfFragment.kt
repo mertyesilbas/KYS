@@ -3,6 +3,7 @@ package com.example.kys.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.ArrayAdapter
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
 import kotlinx.android.synthetic.main.fragment_create_conf.view.*
@@ -11,6 +12,15 @@ import kotlinx.android.synthetic.main.fragment_create_conf.view.*
 class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
     private var _binding: FragmentCreateConfBinding? = null
     private val binding get() = _binding!!
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            val durations = resources.getStringArray(R.array.durations)
+            val arrayAdapter = ArrayAdapter(requireContext(), R.layout.conf_duration, durations)
+            binding.confDurationTextView.setAdapter(arrayAdapter)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,6 +63,7 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 timePickerFragment.show(supportFragmentManager, "TimePickerFragment")
             }
         }
+
     }
 
     override fun onDestroyView() {
