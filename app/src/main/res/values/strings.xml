@@ -7,6 +7,7 @@
     <string name="profile">Profilim</string>
     <!--    Create Conference Strings   -->
     <string name="conference_name">Konferans Adı</string>
+    <string name="conference_topic">Konferans Konusu</string>
     <string name="conference_mail">İletişim Mail</string>
     <string name="conference_required">Gerekli</string>
     <string name="conference_date">Konferans Tarihi</string>

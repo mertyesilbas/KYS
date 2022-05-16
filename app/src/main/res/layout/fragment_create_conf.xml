@@ -61,6 +61,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp" />
             </com.google.android.material.textfield.TextInputLayout>
+            <!--            Conference Topic            -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confTopicTextInputLayout"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/conference_topic"
+                android:textColorHint="@color/black"
+                app:helperText="@string/conference_required"
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/blue">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confTopicEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:drawableEnd="@drawable/ic_conf_topic"/>
+            </com.google.android.material.textfield.TextInputLayout>
             <!--            Conference Mail             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confMailTextInputLayout"
@@ -179,27 +199,30 @@
                     android:editable="false"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <RadioGroup
                 android:id="@+id/confRadioGroup"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
-                android:checkedButton="@id/confRadioButton1"
-                android:background="@drawable/border_radio_group">
+                android:background="@drawable/border_radio_group"
+                android:checkedButton="@id/confRadioButton1">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/conference_type_title"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"
+                    android:text="@string/conference_type_title" />
 
                 <RadioButton
                     android:id="@+id/confRadioButton1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="@string/conference_type_online"/>
+                    android:text="@string/conference_type_online" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confOnlineTextInputLayout"
                     style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -229,7 +252,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/conference_type_face"/>
+                    android:text="@string/conference_type_face" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confAddressTextInputLayout"
                     style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -257,13 +281,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/confSendButton"
-                android:layout_width="300dp"
-                android:layout_height="60dp" 
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="30dp"
                 style="@style/ThemeOverlay.Material3.Button"
-                android:text="@string/conference_send"
-                />
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/conference_send" />
 
         </LinearLayout>
 
