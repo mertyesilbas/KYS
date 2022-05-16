@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">KYS</string>
     <!--    Bottom Navigation Strings   -->
-    <string name="home">Ana Sayfam</string>
     <string name="conf">Konferans</string>
     <string name="create_conf">Yeni Koferans</string>
     <string name="profile">Profilim</string>
+    <!--           Home Strings         -->
+    <string name="home_welcome">Hoşgeldin Mert!</string>
     <!--    Create Conference Strings   -->
     <string name="conference_name">Konferans Adı</string>
     <string name="conference_mail">İletişim Mail</string>
