@@ -20,6 +20,18 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
             val arrayAdapter = ArrayAdapter(requireContext(), R.layout.conf_duration, durations)
             binding.confDurationTextView.setAdapter(arrayAdapter)
         }
+        binding.apply {
+            confRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+                if (checkedId == R.id.confRadioButton2) {
+                    confOnlineEditText.isEnabled = false
+                    confAddressEditText.isEnabled = true
+                }
+                if (checkedId == R.id.confRadioButton1) {
+                    confAddressEditText.isEnabled = false
+                    confOnlineEditText.isEnabled = true
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

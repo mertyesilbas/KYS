@@ -179,6 +179,84 @@
                     android:editable="false"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
+            <RadioGroup
+                android:id="@+id/confRadioGroup"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:checkedButton="@id/confRadioButton1"
+                android:background="@drawable/border_radio_group">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/conference_type_title"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/confRadioButton1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/conference_type_online"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confOnlineTextInputLayout"
+                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    android:layout_width="305dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/conference_link"
+                    android:textColorHint="@color/black"
+                    app:endIconDrawable="@drawable/ic_conf_link"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/black"
+                    app:helperText="@string/conference_required"
+                    app:helperTextTextColor="@color/red"
+                    app:hintTextColor="@color/blue">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/confOnlineEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:enabled="true"
+                        android:inputType="textWebEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RadioButton
+                    android:id="@+id/confRadioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/conference_type_face"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confAddressTextInputLayout"
+                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    android:layout_width="305dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/conference_address"
+                    android:textColorHint="@color/black"
+                    app:endIconDrawable="@drawable/ic_conf_address"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/black"
+                    app:helperText="@string/conference_required"
+                    app:helperTextTextColor="@color/red"
+                    app:hintTextColor="@color/blue">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/confAddressEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:enabled="false"
+                        android:inputType="textPostalAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </RadioGroup>
+
+            
+
         </LinearLayout>
 
 
