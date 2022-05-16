@@ -255,7 +255,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </RadioGroup>
 
-            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confSendButton"
+                android:layout_width="300dp"
+                android:layout_height="60dp" 
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="30dp"
+                style="@style/ThemeOverlay.Material3.Button"
+                android:text="@string/conference_send"
+                />
 
         </LinearLayout>
 
