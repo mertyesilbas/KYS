@@ -45,13 +45,12 @@
             <!--            Conference Name             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confNameTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_name"
-                android:textColorHint="@color/black"
                 app:helperText="@string/conference_required"
                 app:helperTextTextColor="@color/red"
                 app:hintTextColor="@color/blue">
@@ -64,13 +63,12 @@
             <!--            Conference Topic            -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confTopicTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_topic"
-                android:textColorHint="@color/black"
                 app:helperText="@string/conference_required"
                 app:helperTextTextColor="@color/red"
                 app:hintTextColor="@color/blue">
@@ -84,13 +82,12 @@
             <!--            Conference Mail             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confMailTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_mail"
-                android:textColorHint="@color/black"
                 app:helperText="@string/conference_required"
                 app:helperTextTextColor="@color/red"
                 app:hintTextColor="@color/blue">
@@ -104,13 +101,12 @@
             <!--            Conference Date             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confDateTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_date"
-                android:textColorHint="@color/black"
                 app:endIconDrawable="@drawable/ic_conf_date"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
@@ -127,13 +123,12 @@
             <!--            Conference Hour             -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confHourTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_hour"
-                android:textColorHint="@color/black"
                 app:endIconDrawable="@drawable/ic_conf_hour"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
@@ -157,7 +152,6 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/transparent"
                 android:hint="@string/conference_duration"
-                android:textColorHint="@color/black"
                 app:helperText="@string/conference_required"
                 app:helperTextTextColor="@color/red"
                 app:hintTextColor="@color/blue"
@@ -178,13 +172,12 @@
             <!--            Estimated Callers           -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confEstTextInputLayout"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/conference_est_callers"
-                android:textColorHint="@color/black"
                 app:endIconDrawable="@drawable/ic_conf_est"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
@@ -206,6 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
+                android:paddingBottom="15dp"
                 android:background="@drawable/border_radio_group"
                 android:checkedButton="@id/confRadioButton1">
 
@@ -223,9 +217,23 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/conference_type_online" />
 
+                <RadioButton
+                    android:id="@+id/confRadioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/conference_type_face" />
+
+                <RadioButton
+                    android:id="@+id/confRadioButton3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/conference_type_both" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confOnlineTextInputLayout"
-                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    style="@style/MyTextInputLayout"
                     android:layout_width="305dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -247,16 +255,10 @@
                         android:inputType="textWebEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/confRadioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/conference_type_face" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confAddressTextInputLayout"
-                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    style="@style/MyTextInputLayout"
                     android:layout_width="305dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"

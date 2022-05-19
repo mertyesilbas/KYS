@@ -12,4 +12,6 @@
     <color name="blue">#2c5784</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="purple">#422c84</color>
+    <color name="grey">#808080</color>
 </resources>
