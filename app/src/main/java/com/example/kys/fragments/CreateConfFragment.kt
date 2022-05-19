@@ -30,6 +30,10 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                     confAddressEditText.isEnabled = false
                     confOnlineEditText.isEnabled = true
                 }
+                if (checkedId == R.id.confRadioButton3) {
+                    confAddressEditText.isEnabled = true
+                    confOnlineEditText.isEnabled = true
+                }
             }
         }
     }

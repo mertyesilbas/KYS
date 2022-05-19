@@ -49,6 +49,7 @@
     <string name="conference_est_callers">Beklenen Katılımcı Sayısı</string>
     <string name="conference_type_online">Online</string>
     <string name="conference_type_face">Yüz Yüze</string>
+    <string name="conference_type_both">Karma</string>
     <string name="conference_type_title">Konferans Tipi</string>
     <string name="conference_address">Adres</string>
     <string name="conference_link">Online Katılım Link</string>
