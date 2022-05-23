@@ -10,7 +10,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/black"
+        android:background="@color/blue"
         app:backgroundTint="@null"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:itemIconSize="20dp"

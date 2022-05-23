@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.KYS" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimary">@color/yellow</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -25,7 +25,7 @@
     </style>
 
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/blue</item>
+        <item name="android:color">@color/dark_blue</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="Widget.Material3.Toolbar.Surface">
