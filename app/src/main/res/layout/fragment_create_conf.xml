@@ -243,8 +243,6 @@
                     app:endIconDrawable="@drawable/ic_conf_link"
                     app:endIconMode="custom"
                     app:endIconTint="@color/black"
-                    app:helperText="@string/conference_required"
-                    app:helperTextTextColor="@color/red"
                     app:hintTextColor="@color/blue">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -268,8 +266,6 @@
                     app:endIconDrawable="@drawable/ic_conf_address"
                     app:endIconMode="custom"
                     app:endIconTint="@color/black"
-                    app:helperText="@string/conference_required"
-                    app:helperTextTextColor="@color/red"
                     app:hintTextColor="@color/blue">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -288,7 +284,9 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
-                android:text="@string/conference_send" />
+                android:text="@string/conference_send"
+                android:textColor="@color/black"
+                android:textFontWeight="700"/>
 
         </LinearLayout>
 
