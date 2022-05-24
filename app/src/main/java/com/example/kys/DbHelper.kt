@@ -31,12 +31,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     "REFERENCES " + TABLE_NAME1 + "(" + ID_COL + ")" +
                 ")")
 
-        val query1 = ("CREATE TABLE" + TABLE_NAME1 + " ("
+        val query1 = ("CREATE TABLE " + TABLE_NAME1 + " ("
                 + ID_COL + " INTEGER PRIMARY KEY, " +
                 USERNAME + " TEXT," +
                 PROFILE_PHOTO + " BLOB," +
                 CREATE_DATE + " TEXT," +
-                CREATE_TIME + " TEXT" +
+                CREATE_TIME + " TEXT," +
+                USER_UID + " TEXT" +
                 ")")
 
         db.execSQL(query1)
@@ -72,10 +73,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         db.insert(TABLE_NAME, null, values)
 
-        db.close()
     }
 
-    fun addProfile(username : String, profile_photo : String, create_date : String, create_time: String ){
+    fun addProfile(username : String, profile_photo : String, create_date : String, create_time: String, user_uid: String){
 
         val values = ContentValues()
 
@@ -83,12 +83,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(PROFILE_PHOTO, profile_photo)
         values.put(CREATE_DATE, create_date)
         values.put(CREATE_TIME, create_time)
+        values.put(USER_UID, user_uid)
 
         val db = this.writableDatabase
 
         db.insert(TABLE_NAME1, null, values)
 
-        db.close()
     }
 
     fun getConference(): Cursor? {
@@ -134,5 +134,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         val USERNAME = "username"
         val PROFILE_PHOTO = "profile_photo"
+        val USER_UID = "user_uid"
     }
 }

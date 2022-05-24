@@ -48,6 +48,7 @@
         app:layout_constraintVertical_bias="0.08">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImageView"
             android:layout_width="150dp"
             android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
@@ -60,12 +61,13 @@
             app:srcCompat="@mipmap/ic_profile_photo_foreground" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/profile_name"
+            android:id="@+id/profileName"
             android:layout_width="150dp"
-            android:layout_height="20dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Mert Yeşilbaş" />
+            android:gravity="center"
+            android:text=""
+            android:textSize="20sp" />
     </LinearLayout>
 
     <ImageButton

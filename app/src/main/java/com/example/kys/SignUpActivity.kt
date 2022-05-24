@@ -43,12 +43,13 @@ class SignUpActivity : AppCompatActivity() {
 
                             val profilePhoto = "drawable://" + R.mipmap.ic_profile_photo_foreground
 
-                            val sdfDate = SimpleDateFormat("dd/M/yyyy")
-                            val sdfTime = SimpleDateFormat("HH:mm:ss")
+                            val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+                            val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
                             val createDate = sdfDate.format(Date())
                             val createTime = sdfTime.format(Date())
+                            val userUid = user.currentUser?.uid.toString()
 
-                            db.addProfile(userName1, profilePhoto, createDate, createTime)
+                            db.addProfile(userName1, profilePhoto, createDate, createTime, userUid)
 
                             startActivity(intent)
                         } else {

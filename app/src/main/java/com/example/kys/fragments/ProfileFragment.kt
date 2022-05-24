@@ -1,10 +1,12 @@
 package com.example.kys.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.SignInActivity
 import com.example.kys.databinding.FragmentProfileBinding
@@ -13,6 +15,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentProfileBinding.bind(view)
@@ -28,10 +31,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.apply {
-            val userName = user.currentUser?.email.toString()
-            val userName1: String = userName.substringBefore("@")
+            val db = DBHelper(requireActivity(),null)
 
-            Toast.makeText(activity, userName1, Toast.LENGTH_SHORT).show()
+            val dbQuery = db.readableDatabase
+            val userUid = user.currentUser?.uid.toString()
+            val query = "SELECT username FROM profile WHERE profile.user_uid = " + "'"+ userUid + "'"
+
+            val getProfileName = dbQuery.rawQuery(query , null)
+            getProfileName.moveToFirst()
+
+            profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
+            profileName.text = getProfileName.getString(0)
+
+//            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
+
+
         }
 
     }
