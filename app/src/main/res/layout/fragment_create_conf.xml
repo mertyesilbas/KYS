@@ -122,7 +122,7 @@
             </com.google.android.material.textfield.TextInputLayout>
             <!--            Conference Hour             -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confHourTextInputLayout"
+                android:id="@+id/confTimeTextInputLayout"
                 style="@style/MyTextInputLayout"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
                 app:hintTextColor="@color/blue">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/confHourEditText"
+                    android:id="@+id/confTimeEditText"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:editable="false" />

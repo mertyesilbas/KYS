@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_create_conf.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
@@ -42,6 +47,8 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCreateConfBinding.bind(view)
 
+        val user = FirebaseAuth.getInstance()
+
         binding.apply {
             confDateTextInputLayout.setEndIconOnClickListener {
                 val datePickerFragment = DatePickerFragment()
@@ -62,7 +69,7 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
         }
 
         binding.apply {
-            confHourTextInputLayout.setEndIconOnClickListener {
+            confTimeTextInputLayout.setEndIconOnClickListener {
                 val timePickerFragment = TimePickerFragment()
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
@@ -72,7 +79,7 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 ) { resultKey, bundle ->
                     if (resultKey == "REQUEST_KEY1") {
                         val time = bundle.getString("SELECTED_TIME")
-                        confHourTextInputLayout.confHourEditText.setText(time)
+                        confTimeTextInputLayout.confTimeEditText.setText(time)
                     }
                 }
 
@@ -80,6 +87,54 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
             }
         }
 
+        binding.apply {
+            confSendButton.setOnClickListener{
+                val db = DBHelper(requireActivity(),null)
+
+                val dbQuery = db.readableDatabase
+                val userUid = user.currentUser?.uid.toString()
+                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'"+ userUid + "'"
+
+                val getProfileId = dbQuery.rawQuery(query , null)
+                getProfileId.moveToFirst()
+
+                val profileId = getProfileId.getInt(0)
+                val conferenceName = confNameTextInputLayout.editText?.text.toString()
+                val conferenceTitle = confTopicTextInputLayout.editText?.text.toString()
+                val mail = confMailTextInputLayout.editText?.text.toString()
+                val conferenceDate = confDateTextInputLayout.editText?.text.toString()
+                val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
+                val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
+              val estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
+                val conferenceType = confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId).toString()
+                var conferenceType1: Int = 0
+                var onlineLink: String = ""
+                var address: String = ""
+                if (conferenceType == "confRadioButton1"){
+                    conferenceType1 = 1
+                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                    address = ""
+                }
+                if (conferenceType == "confRadioButton2"){
+                    conferenceType1 = 2
+                    onlineLink = ""
+                    address = confAddressTextInputLayout.editText?.text.toString()
+                }
+                if (conferenceType == "confRadioButton3"){
+                    conferenceType1 = 3
+                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                    address = confAddressTextInputLayout.editText?.text.toString()
+                }
+
+                val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+                val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
+                val createDate = sdfDate.format(Date())
+                val createTime = sdfTime.format(Date())
+                db.addConference(profileId,conferenceName,conferenceTitle,mail,conferenceDate,conferenceTime,conferenceDuration, estimatedCallers, conferenceType1, onlineLink, address,createDate,createTime)
+
+                Toast.makeText(requireActivity(), conferenceType.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroyView() {

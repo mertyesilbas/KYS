@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.kys.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -17,7 +19,7 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val intent = Intent(this, SignInActivity::class.java)
-
+        val user = FirebaseAuth.getInstance()
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.textView.setOnClickListener {
@@ -33,6 +35,22 @@ class SignUpActivity : AppCompatActivity() {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             Toast.makeText(this, "Başarıyla Kayıt Oldunuz!", Toast.LENGTH_SHORT).show()
+                            // Creating User Profile
+                            val db = DBHelper(this,null)
+
+                            val userName = user.currentUser?.email.toString()
+                            val userName1: String = userName.substringBefore("@")
+
+                            val profilePhoto = "drawable://" + R.mipmap.ic_profile_photo_foreground
+
+                            val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+                            val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
+                            val createDate = sdfDate.format(Date())
+                            val createTime = sdfTime.format(Date())
+                            val userUid = user.currentUser?.uid.toString()
+
+                            db.addProfile(userName1, profilePhoto, createDate, createTime, userUid)
+
                             startActivity(intent)
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
