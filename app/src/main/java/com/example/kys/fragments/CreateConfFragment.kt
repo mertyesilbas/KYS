@@ -88,51 +88,71 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
         }
 
         binding.apply {
-            confSendButton.setOnClickListener{
-                val db = DBHelper(requireActivity(),null)
+            // Variables from createConferenceForm form
+            val conferenceName = confNameTextInputLayout.editText?.text.toString()
+            val conferenceTitle = confTopicTextInputLayout.editText?.text.toString()
+            val mail = confMailTextInputLayout.editText?.text.toString()
+            val conferenceDate = confDateTextInputLayout.editText?.text.toString()
+            val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
+            val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
+            val estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
+            val conferenceType =
+                confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
+                    .toString()
+            var conferenceType1: Int = 0
+            var onlineLink: String = ""
+            var address: String = ""
+            if (conferenceType == "confRadioButton1") {
+                conferenceType1 = 1
+                onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                address = ""
+            }
+            if (conferenceType == "confRadioButton2") {
+                conferenceType1 = 2
+                onlineLink = ""
+                address = confAddressTextInputLayout.editText?.text.toString()
+            }
+            if (conferenceType == "confRadioButton3") {
+                conferenceType1 = 3
+                onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                address = confAddressTextInputLayout.editText?.text.toString()
+            }
+
+            val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+            val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
+            val createDate = sdfDate.format(Date())
+            val createTime = sdfTime.format(Date())
+
+            // OnClickListener
+            confSendButton.setOnClickListener {
+                val db = DBHelper(requireActivity(), null)
 
                 val dbQuery = db.readableDatabase
                 val userUid = user.currentUser?.uid.toString()
-                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'"+ userUid + "'"
+                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
 
-                val getProfileId = dbQuery.rawQuery(query , null)
+                val getProfileId = dbQuery.rawQuery(query, null)
                 getProfileId.moveToFirst()
 
                 val profileId = getProfileId.getInt(0)
-                val conferenceName = confNameTextInputLayout.editText?.text.toString()
-                val conferenceTitle = confTopicTextInputLayout.editText?.text.toString()
-                val mail = confMailTextInputLayout.editText?.text.toString()
-                val conferenceDate = confDateTextInputLayout.editText?.text.toString()
-                val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
-                val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
-              val estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
-                val conferenceType = confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId).toString()
-                var conferenceType1: Int = 0
-                var onlineLink: String = ""
-                var address: String = ""
-                if (conferenceType == "confRadioButton1"){
-                    conferenceType1 = 1
-                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
-                    address = ""
-                }
-                if (conferenceType == "confRadioButton2"){
-                    conferenceType1 = 2
-                    onlineLink = ""
-                    address = confAddressTextInputLayout.editText?.text.toString()
-                }
-                if (conferenceType == "confRadioButton3"){
-                    conferenceType1 = 3
-                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
-                    address = confAddressTextInputLayout.editText?.text.toString()
-                }
 
-                val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
-                val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
-                val createDate = sdfDate.format(Date())
-                val createTime = sdfTime.format(Date())
-                db.addConference(profileId,conferenceName,conferenceTitle,mail,conferenceDate,conferenceTime,conferenceDuration, estimatedCallers, conferenceType1, onlineLink, address,createDate,createTime)
+                db.addConference(
+                    profileId,
+                    conferenceName,
+                    conferenceTitle,
+                    mail,
+                    conferenceDate,
+                    conferenceTime,
+                    conferenceDuration,
+                    estimatedCallers,
+                    conferenceType1,
+                    onlineLink,
+                    address,
+                    createDate,
+                    createTime
+                )
 
-                Toast.makeText(requireActivity(), conferenceType.toString(), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireActivity(), conferenceType.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
