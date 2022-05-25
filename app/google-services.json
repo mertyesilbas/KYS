@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598110136742",
+    "project_id": "konferans-yonetim-sistemi",
+    "storage_bucket": "konferans-yonetim-sistemi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598110136742:android:27e79828fc90d8e50dc767",
+        "android_client_info": {
+          "package_name": "com.example.kys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598110136742-ielk5tls3dappcfovq63nhqp5l8to9os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQmLUhx8SpgsfQ37IS7fbqZ_Ogio6K3-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598110136742-ielk5tls3dappcfovq63nhqp5l8to9os.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

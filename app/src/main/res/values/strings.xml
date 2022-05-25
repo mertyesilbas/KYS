@@ -8,6 +8,7 @@
     <string name="home_welcome">Hoşgeldin Mert!</string>
     <!--    Create Conference Strings   -->
     <string name="conference_name">Konferans Adı</string>
+    <string name="conference_topic">Konferans Konusu</string>
     <string name="conference_mail">İletişim Mail</string>
     <string name="conference_required">Gerekli</string>
     <string name="conference_date">Konferans Tarihi</string>
@@ -49,8 +50,22 @@
     <string name="conference_est_callers">Beklenen Katılımcı Sayısı</string>
     <string name="conference_type_online">Online</string>
     <string name="conference_type_face">Yüz Yüze</string>
+    <string name="conference_type_both">Karma</string>
     <string name="conference_type_title">Konferans Tipi</string>
     <string name="conference_address">Adres</string>
     <string name="conference_link">Online Katılım Link</string>
     <string name="conference_send">Gönder</string>
+    <!--    LogIn/SignUp Strings    -->
+    <string name="login_type_email">Email\'inizi Giriniz</string>
+    <string name="login_type_password">Şifrenizi Giriniz</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="login_not_registered">Henüz kayıt olmadınız mı? Hemen kayıt olun!</string>
+    <string name="signup_type_email">Email\'inizi Giriniz</string>
+    <string name="signup_password">Şifrenizi Giriniz</string>
+    <string name="signup_retype_password">Şifreyi Tekrar Giriniz</string>
+    <string name="signup_button">Kayıt Ol</string>
+    <string name="signup_already_registered">Zaten üye misiniz? Hemen giriş yapın!</string>
+    <!--    Profile Strings     -->
+    <string name="logout_button">Çıkış Yap</string>
+
 </resources>

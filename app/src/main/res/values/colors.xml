@@ -12,4 +12,11 @@
     <color name="blue">#2c5784</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="purple">#422c84</color>
+    <color name="grey">#808080</color>
+    <color name="yellow">#FFC801</color>
+    <color name="raisin_black">#1E212B</color>
+    <color name="light_cyan">#D7F9FF</color>
+    <color name="orange">#FC7A57</color>
+    <color name="dark_blue">#14283E</color>
 </resources>

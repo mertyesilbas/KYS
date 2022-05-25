@@ -4,13 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/drawable-anydpi/ic_conf_mail.xml" value="0.16" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1575" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/drawable/border_radio_group.xml" value="0.1605" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/drawable/profile_rounded_top.xml" value="0.1575" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/activity_sign_in.xml" value="0.18" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/activity_sign_up2.xml" value="0.12025796661608498" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/conf_duration.xml" value="0.1479514415781487" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_create_conf.xml" value="0.33" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_date_picker.xml" value="0.13050075872534142" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_home.xml" value="0.17916666666666667" />
-        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_profile.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_profile.xml" value="0.40555555555555556" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/layout/fragment_time_picker.xml" value="0.13050075872534142" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/Mert/AndroidStudioProjects/KYS/app/src/main/res/menu/conf_duration_menu.xml" value="0.2" />
