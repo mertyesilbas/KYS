@@ -8,13 +8,16 @@ import com.example.kys.fragments.CreateConfFragment
 import com.example.kys.fragments.HomeFragment
 import com.example.kys.fragments.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val fragmentManager: FragmentManager = supportFragmentManager
 
@@ -45,4 +48,10 @@ class MainActivity : AppCompatActivity() {
 //            transaction.commit()
 //        }
 //    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val user = FirebaseAuth.getInstance()
+        user.signOut()
+    }
 }

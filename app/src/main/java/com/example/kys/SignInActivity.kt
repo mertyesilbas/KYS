@@ -20,6 +20,7 @@ class SignInActivity : AppCompatActivity() {
         val intent = Intent(this, SignUpActivity::class.java)
 
         firebaseAuth = FirebaseAuth.getInstance()
+//        firebaseAuth.signOut()
         binding.textView.setOnClickListener {
             startActivity(intent)
         }
@@ -32,8 +33,7 @@ class SignInActivity : AppCompatActivity() {
 
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                        validateCurrentUser()
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
@@ -47,6 +47,10 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        validateCurrentUser()
+    }
+
+    fun validateCurrentUser(){
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)

@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">KYS</string>
     <!--    Bottom Navigation Strings   -->
-    <string name="home">Ana Sayfam</string>
     <string name="conf">Konferans</string>
     <string name="create_conf">Yeni Koferans</string>
     <string name="profile">Profilim</string>
+    <!--           Home Strings         -->
+    <string name="home_welcome">Hoşgeldin</string>
     <!--    Create Conference Strings   -->
     <string name="conference_name">Konferans Adı</string>
     <string name="conference_topic">Konferans Konusu</string>
@@ -66,5 +67,11 @@
     <string name="signup_already_registered">Zaten üye misiniz? Hemen giriş yapın!</string>
     <!--    Profile Strings     -->
     <string name="logout_button">Çıkış Yap</string>
+    <!--    Home Strings        -->
+    <string name="home_conferences">Konferanslar</string>
+    <string name="home_conf_join">Katıl</string>
+    <string name="home_conf_edit">Düzenle</string>
+    <string name="home_conf_cancel">İptal Et</string>
+    <string name="home_conf_details">Ayrıntılar</string>
 
 </resources>

@@ -12,8 +12,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     override fun onCreate(db: SQLiteDatabase) {
 
-        val query = ("CREATE TABLE " + TABLE_NAME + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+        val query = ("CREATE TABLE " + TABLE_NAME + " (" +
+                ID_COL + " INTEGER PRIMARY KEY, " +
                 PROFILE_ID + " INTEGER NOT NULL," +
                 CONFERENCE_NAME + " TEXT," +
                 CONFERENCE_TITLE + " TEXT," +
@@ -31,8 +31,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     "REFERENCES " + TABLE_NAME1 + "(" + ID_COL + ")" +
                 ")")
 
-        val query1 = ("CREATE TABLE " + TABLE_NAME1 + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+        val query1 = ("CREATE TABLE " + TABLE_NAME1 + " (" +
+                ID_COL + " INTEGER PRIMARY KEY, " +
                 USERNAME + " TEXT," +
                 PROFILE_PHOTO + " BLOB," +
                 CREATE_DATE + " TEXT," +
@@ -40,14 +40,28 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 USER_UID + " TEXT" +
                 ")")
 
+        val query2 = ("CREATE TABLE " + TABLE_NAME2 + " (" +
+                ID_COL + " INTEGER PRIMARY KEY, " +
+                PROFILE_ID + " INTEGER NOT NULL," +
+                CONFERENCE_ID + " INTEGER NOT NULL," +
+                CREATE_DATE + " TEXT," +
+                CREATE_TIME + " TEXT," +
+                "FOREIGN KEY (" + PROFILE_ID + ")" +
+                "REFERENCES " + TABLE_NAME1 + "(" + ID_COL + ")," +
+                "FOREIGN KEY (" + CONFERENCE_ID + ")" +
+                "REFERENCES " + TABLE_NAME + "(" + ID_COL + ")" +
+                ")")
+
         db.execSQL(query1)
         db.execSQL(query)
+        db.execSQL(query2)
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME1)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2)
         onCreate(db)
     }
 
@@ -75,6 +89,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
+    fun deleteConference(){
+        val db = this.writableDatabase
+
+        val query = "DELETE FROM " + TABLE_NAME
+
+        db.execSQL(query)
+    }
+
     fun addProfile(username : String, profile_photo : String, create_date : String, create_time: String, user_uid: String){
 
         val values = ContentValues()
@@ -89,6 +111,17 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         db.insert(TABLE_NAME1, null, values)
 
+    }
+
+    fun addConfAttend(profile_id: Int, conference_id: Int) {
+        val values = ContentValues()
+
+        values.put(PROFILE_ID, profile_id)
+        values.put(CONFERENCE_ID, conference_id)
+
+        val db = this.writableDatabase
+
+        db.insert(TABLE_NAME2,null,values)
     }
 
     fun getConference(): Cursor? {
@@ -114,9 +147,11 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         val TABLE_NAME = "conference"
         val TABLE_NAME1 = "profile"
+        val TABLE_NAME2 = "attended_conferences"
 
         val ID_COL = "id"
         val PROFILE_ID = "profile_id"
+        val CONFERENCE_ID = "conference_id"
 
 
         val CONFERENCE_NAME = "conference_name"
