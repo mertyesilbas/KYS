@@ -67,6 +67,9 @@
     <string name="signup_already_registered">Zaten üye misiniz? Hemen giriş yapın!</string>
     <!--    Profile Strings     -->
     <string name="logout_button">Çıkış Yap</string>
+    <string name="profile_mail">E-Posta Adresi</string>
+    <string name="profile_change_name">İsim Değiştir</string>
+    <string name="profile_change_photo">Fotoğrafı Değiştir</string>
     <!--    Home Strings        -->
     <string name="home_conferences">Konferanslar</string>
     <string name="home_conf_join">Katıl</string>
