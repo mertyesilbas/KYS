@@ -9,6 +9,7 @@ import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_create_conf.*
 import kotlinx.android.synthetic.main.fragment_create_conf.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -88,43 +89,46 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
         }
 
         binding.apply {
-            // Variables from createConferenceForm form
-            val conferenceName = confNameTextInputLayout.editText?.text.toString()
-            val conferenceTitle = confTopicTextInputLayout.editText?.text.toString()
-            val mail = confMailTextInputLayout.editText?.text.toString()
-            val conferenceDate = confDateTextInputLayout.editText?.text.toString()
-            val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
-            val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
-            val estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
-            val conferenceType =
-                confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
-                    .toString()
-            var conferenceType1: Int = 0
-            var onlineLink: String = ""
-            var address: String = ""
-            if (conferenceType == "confRadioButton1") {
-                conferenceType1 = 1
-                onlineLink = confOnlineTextInputLayout.editText?.text.toString()
-                address = ""
-            }
-            if (conferenceType == "confRadioButton2") {
-                conferenceType1 = 2
-                onlineLink = ""
-                address = confAddressTextInputLayout.editText?.text.toString()
-            }
-            if (conferenceType == "confRadioButton3") {
-                conferenceType1 = 3
-                onlineLink = confOnlineTextInputLayout.editText?.text.toString()
-                address = confAddressTextInputLayout.editText?.text.toString()
-            }
-
-            val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
-            val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
-            val createDate = sdfDate.format(Date())
-            val createTime = sdfTime.format(Date())
-
-            // OnClickListener
             confSendButton.setOnClickListener {
+                // Variables from createConferenceForm form
+                val conferenceName = confNameTextInputLayout.editText?.text.toString()
+                val conferenceTitle = confTopicTextInputLayout.editText?.text.toString()
+                val mail = confMailTextInputLayout.editText?.text.toString()
+                val conferenceDate = confDateTextInputLayout.editText?.text.toString()
+                val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
+                val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
+                var estimatedCallers: Int = 0
+                if (confEstTextInputLayout.editText?.text.toString().trim().length > 0) {
+                    estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
+                }
+                val conferenceType =
+                    confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
+                        .toString()
+                var conferenceType1: Int = 0
+                var onlineLink: String = ""
+                var address: String = ""
+                if (conferenceType == "confRadioButton1") {
+                    conferenceType1 = 1
+                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                    address = ""
+                }
+                if (conferenceType == "confRadioButton2") {
+                    conferenceType1 = 2
+                    onlineLink = ""
+                    address = confAddressTextInputLayout.editText?.text.toString()
+                }
+                if (conferenceType == "confRadioButton3") {
+                    conferenceType1 = 3
+                    onlineLink = confOnlineTextInputLayout.editText?.text.toString()
+                    address = confAddressTextInputLayout.editText?.text.toString()
+                }
+
+                val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+                val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
+                val createDate = sdfDate.format(Date())
+                val createTime = sdfTime.format(Date())
+
+                // Database
                 val db = DBHelper(requireActivity(), null)
 
                 val dbQuery = db.readableDatabase
@@ -136,23 +140,38 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
 
                 val profileId = getProfileId.getInt(0)
 
-                db.addConference(
-                    profileId,
-                    conferenceName,
-                    conferenceTitle,
-                    mail,
-                    conferenceDate,
-                    conferenceTime,
-                    conferenceDuration,
-                    estimatedCallers,
-                    conferenceType1,
-                    onlineLink,
-                    address,
-                    createDate,
-                    createTime
-                )
 
-//                Toast.makeText(requireActivity(), conferenceType.toString(), Toast.LENGTH_SHORT).show()
+                if ((conferenceName.trim().length > 0) && (conferenceTitle.trim().length > 0) && (mail.trim().length > 0) && (conferenceDate.trim().length > 0) && (conferenceTime.trim().length > 0) && (conferenceDuration.trim().length>0) && ((onlineLink.trim().length>0) || (address.trim().length>0))
+                ) {
+                    db.addConference(
+                        profileId,
+                        conferenceName,
+                        conferenceTitle,
+                        mail,
+                        conferenceDate,
+                        conferenceTime,
+                        conferenceDuration,
+                        estimatedCallers,
+                        conferenceType1,
+                        onlineLink,
+                        address,
+                        createDate,
+                        createTime
+                    )
+                    Toast.makeText(
+                        requireActivity(),
+                        "Koferans Başarıyla Oluşturuldu!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Lütfen Tüm Alanları Doldurunuz!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+
             }
         }
     }
