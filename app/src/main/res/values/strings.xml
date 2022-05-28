@@ -70,11 +70,13 @@
     <string name="profile_mail">E-Posta Adresi</string>
     <string name="profile_change_name">İsim Değiştir</string>
     <string name="profile_change_photo">Fotoğrafı Değiştir</string>
+    <string name="profile_new_username">Yeni Kullanıcı Adı</string>
     <!--    Home Strings        -->
     <string name="home_conferences">Konferanslar</string>
     <string name="home_conf_join">Katıl</string>
     <string name="home_conf_edit">Düzenle</string>
     <string name="home_conf_cancel">İptal Et</string>
     <string name="home_conf_details">Ayrıntılar</string>
+
 
 </resources>

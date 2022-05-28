@@ -5,16 +5,20 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
-
+    val firestoreDb = Firebase.firestore
 
     override fun onCreate(db: SQLiteDatabase) {
 
         val query = ("CREATE TABLE " + TABLE_NAME + " (" +
                 ID_COL + " INTEGER PRIMARY KEY, " +
                 PROFILE_ID + " INTEGER NOT NULL," +
+                FIRESTORE_ID + "TEXT," +
                 CONFERENCE_NAME + " TEXT," +
                 CONFERENCE_TITLE + " TEXT," +
                 MAIL + " TEXT," +
@@ -28,7 +32,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 CREATE_DATE + " TEXT," +
                 CREATE_TIME + " TEXT," +
                 "FOREIGN KEY (" + PROFILE_ID + ")" +
-                    "REFERENCES " + TABLE_NAME1 + "(" + ID_COL + ")" +
+                "REFERENCES " + TABLE_NAME1 + "(" + ID_COL + ")" +
                 ")")
 
         val query1 = ("CREATE TABLE " + TABLE_NAME1 + " (" +
@@ -65,31 +69,90 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun addConference(profile_id : Int, conference_name : String, conference_title: String, mail: String, conference_date: String, conference_time: String, conference_duration: String, estimated_callers: Int, conference_type: Int, online_link: String, conference_address: String, create_date: String, create_time: String){
+    fun addConference(
+        profile_id: Int,
+        conference_name: String,
+        conference_title: String,
+        mail: String,
+        conference_date: String,
+        conference_time: String,
+        conference_duration: String,
+        estimated_callers: Int,
+        conference_type: Int,
+        online_link: String,
+        conference_address: String,
+        create_date: String,
+        create_time: String
+    ) {
+        // Firestore
+        val conference = hashMapOf(
+            PROFILE_ID to profile_id,
+            CONFERENCE_NAME to conference_name,
+            CONFERENCE_TITLE to conference_title,
+            MAIL to mail,
+            CONFERENCE_DATE to conference_date,
+            CONFERENCE_TIME to conference_time,
+            CONFERENCE_DURATION to conference_duration,
+            ESTIMATED_CALLERS to estimated_callers,
+            CONFERENCE_TYPE to conference_type,
+            ONLINE_LINK to online_link,
+            CONFERENCE_ADDRESS to conference_address,
+            CREATE_DATE to create_date,
+            CREATE_TIME to create_time
+        )
 
-        val values = ContentValues()
+        firestoreDb.collection("conference")
+            .add(conference)
+            .addOnSuccessListener { documentReference ->
+                Log.d("Firestore", "ID ile Eklendi: ${documentReference.id}")
+                val values = ContentValues()
 
-        values.put(PROFILE_ID, profile_id)
-        values.put(CONFERENCE_NAME, conference_name)
-        values.put(CONFERENCE_TITLE, conference_title)
-        values.put(MAIL, mail)
-        values.put(CONFERENCE_DATE, conference_date)
-        values.put(CONFERENCE_TIME, conference_time)
-        values.put(CONFERENCE_DURATION, conference_duration)
-        values.put(ESTIMATED_CALLERS, estimated_callers)
-        values.put(CONFERENCE_TYPE, conference_type)
-        values.put(ONLINE_LINK, online_link)
-        values.put(CONFERENCE_ADDRESS, conference_address)
-        values.put(CREATE_DATE,create_date)
-        values.put(CREATE_TIME, create_time)
+                values.put(PROFILE_ID, profile_id)
+                values.put(FIRESTORE_ID, documentReference.id)
+                values.put(CONFERENCE_NAME, conference_name)
+                values.put(CONFERENCE_TITLE, conference_title)
+                values.put(MAIL, mail)
+                values.put(CONFERENCE_DATE, conference_date)
+                values.put(CONFERENCE_TIME, conference_time)
+                values.put(CONFERENCE_DURATION, conference_duration)
+                values.put(ESTIMATED_CALLERS, estimated_callers)
+                values.put(CONFERENCE_TYPE, conference_type)
+                values.put(ONLINE_LINK, online_link)
+                values.put(CONFERENCE_ADDRESS, conference_address)
+                values.put(CREATE_DATE, create_date)
+                values.put(CREATE_TIME, create_time)
 
-        val db = this.writableDatabase
+                val db = this.writableDatabase
 
-        db.insert(TABLE_NAME, null, values)
+                db.insert(TABLE_NAME, null, values)
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Döküman eklerken hata: ", e)
+            }
 
     }
 
-    fun deleteConference(){
+    fun updateConference(
+        profile_id: Int,
+        conference_name: String,
+        conference_title: String,
+        mail: String,
+        conference_date: String,
+        conference_time: String,
+        conference_duration: String,
+        estimated_callers: Int,
+        conference_type: Int,
+        online_link: String,
+        conference_address: String,
+        create_date: String,
+        create_time: String
+    ) {
+        val values = ContentValues()
+
+        
+    }
+
+    fun deleteConference() {
         val db = this.writableDatabase
 
         val query = "DELETE FROM " + TABLE_NAME
@@ -97,7 +160,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(query)
     }
 
-    fun addProfile(username : String, profile_photo : String, create_date : String, create_time: String, user_uid: String){
+    fun addProfile(
+        username: String,
+        profile_photo: String,
+        create_date: String,
+        create_time: String,
+        user_uid: String
+    ) {
 
         val values = ContentValues()
 
@@ -121,7 +190,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         val db = this.writableDatabase
 
-        db.insert(TABLE_NAME2,null,values)
+        db.insert(TABLE_NAME2, null, values)
     }
 
     fun getConference(): Cursor? {
@@ -140,7 +209,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
-    companion object{
+    companion object {
         private val DATABASE_NAME = "KYS"
 
         private val DATABASE_VERSION = 1
@@ -152,6 +221,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val ID_COL = "id"
         val PROFILE_ID = "profile_id"
         val CONFERENCE_ID = "conference_id"
+        val FIRESTORE_ID = "firestore_id"
 
 
         val CONFERENCE_NAME = "conference_name"
