@@ -1,11 +1,14 @@
 package com.example.kys
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.number.IntegerWidth
 import android.util.Log
+import com.example.kys.model.ConferenceListModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -69,95 +72,309 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun addConference(
-        profile_id: Int,
-        conference_name: String,
-        conference_title: String,
-        mail: String,
-        conference_date: String,
-        conference_time: String,
-        conference_duration: String,
-        estimated_callers: Int,
-        conference_type: Int,
-        online_link: String,
-        conference_address: String,
-        create_date: String,
-        create_time: String
-    ) {
+
+    // CONFERENCE ACTIONS
+    fun addConference(conferences: ConferenceListModel): Boolean {
+        var documentRef: String = ""
         // Firestore
         val conference = hashMapOf(
-            PROFILE_ID to profile_id,
-            CONFERENCE_NAME to conference_name,
-            CONFERENCE_TITLE to conference_title,
-            MAIL to mail,
-            CONFERENCE_DATE to conference_date,
-            CONFERENCE_TIME to conference_time,
-            CONFERENCE_DURATION to conference_duration,
-            ESTIMATED_CALLERS to estimated_callers,
-            CONFERENCE_TYPE to conference_type,
-            ONLINE_LINK to online_link,
-            CONFERENCE_ADDRESS to conference_address,
-            CREATE_DATE to create_date,
-            CREATE_TIME to create_time
+            PROFILE_ID to conferences.profile_id,
+            CONFERENCE_NAME to conferences.conference_name,
+            CONFERENCE_TITLE to conferences.conference_title,
+            MAIL to conferences.mail,
+            CONFERENCE_DATE to conferences.conference_date,
+            CONFERENCE_TIME to conferences.conference_time,
+            CONFERENCE_DURATION to conferences.conference_duration,
+            ESTIMATED_CALLERS to conferences.estimated_callers,
+            CONFERENCE_TYPE to conferences.conference_type,
+            ONLINE_LINK to conferences.online_link,
+            CONFERENCE_ADDRESS to conferences.conference_address,
+            CREATE_DATE to conferences.create_date,
+            CREATE_TIME to conferences.create_time
         )
 
         firestoreDb.collection("conference")
             .add(conference)
             .addOnSuccessListener { documentReference ->
+                documentRef = documentReference.id
                 Log.d("Firestore", "ID ile Eklendi: ${documentReference.id}")
-                val values = ContentValues()
-
-                values.put(PROFILE_ID, profile_id)
-                values.put(FIRESTORE_ID, documentReference.id)
-                values.put(CONFERENCE_NAME, conference_name)
-                values.put(CONFERENCE_TITLE, conference_title)
-                values.put(MAIL, mail)
-                values.put(CONFERENCE_DATE, conference_date)
-                values.put(CONFERENCE_TIME, conference_time)
-                values.put(CONFERENCE_DURATION, conference_duration)
-                values.put(ESTIMATED_CALLERS, estimated_callers)
-                values.put(CONFERENCE_TYPE, conference_type)
-                values.put(ONLINE_LINK, online_link)
-                values.put(CONFERENCE_ADDRESS, conference_address)
-                values.put(CREATE_DATE, create_date)
-                values.put(CREATE_TIME, create_time)
-
-                val db = this.writableDatabase
-
-                db.insert(TABLE_NAME, null, values)
             }
             .addOnFailureListener { e ->
                 Log.w("Firestore", "Döküman eklerken hata: ", e)
             }
 
-    }
-
-    fun updateConference(
-        profile_id: Int,
-        conference_name: String,
-        conference_title: String,
-        mail: String,
-        conference_date: String,
-        conference_time: String,
-        conference_duration: String,
-        estimated_callers: Int,
-        conference_type: Int,
-        online_link: String,
-        conference_address: String,
-        create_date: String,
-        create_time: String
-    ) {
         val values = ContentValues()
 
-        
-    }
+        values.put(PROFILE_ID, conferences.profile_id)
+        values.put(FIRESTORE_ID, documentRef)
+        values.put(CONFERENCE_NAME,conferences. conference_name)
+        values.put(CONFERENCE_TITLE, conferences.conference_title)
+        values.put(MAIL, conferences.mail)
+        values.put(CONFERENCE_DATE, conferences.conference_date)
+        values.put(CONFERENCE_TIME, conferences.conference_time)
+        values.put(CONFERENCE_DURATION, conferences.conference_duration)
+        values.put(ESTIMATED_CALLERS, conferences.estimated_callers)
+        values.put(CONFERENCE_TYPE, conferences.conference_type)
+        values.put(ONLINE_LINK, conferences.online_link)
+        values.put(CONFERENCE_ADDRESS, conferences.conference_address)
+        values.put(CREATE_DATE, conferences.create_date)
+        values.put(CREATE_TIME, conferences.create_time)
 
-    fun deleteConference() {
         val db = this.writableDatabase
 
-        val query = "DELETE FROM " + TABLE_NAME
+        val _success = db.insert(TABLE_NAME, null, values)
+        db.close()
+        return Integer.parseInt("$_success") != -1
+    }
 
-        db.execSQL(query)
+    fun updateConference(conferences: ConferenceListModel): Boolean {
+        val conference = hashMapOf(
+            PROFILE_ID to conferences.profile_id,
+            CONFERENCE_NAME to conferences.conference_name,
+            CONFERENCE_TITLE to conferences.conference_title,
+            MAIL to conferences.mail,
+            CONFERENCE_DATE to conferences.conference_date,
+            CONFERENCE_TIME to conferences.conference_time,
+            CONFERENCE_DURATION to conferences.conference_duration,
+            ESTIMATED_CALLERS to conferences.estimated_callers,
+            CONFERENCE_TYPE to conferences.conference_type,
+            ONLINE_LINK to conferences.online_link,
+            CONFERENCE_ADDRESS to conferences.conference_address,
+            CREATE_DATE to conferences.create_date,
+            CREATE_TIME to conferences.create_time
+        )
+
+        firestoreDb.collection("conference").document(conferences.firestore_id)
+            .set(conference)
+            .addOnSuccessListener { Log.d("Firestore", "Döküman başarıyla yazdırıldı!") }
+            .addOnFailureListener { e -> Log.w("Firestore", "Dökümanı yazarken hata!", e) }
+
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        values.put(PROFILE_ID, conferences.profile_id)
+        values.put(FIRESTORE_ID, conferences.firestore_id)
+        values.put(CONFERENCE_NAME, conferences.conference_name)
+        values.put(CONFERENCE_TITLE, conferences.conference_title)
+        values.put(MAIL, conferences.mail)
+        values.put(CONFERENCE_DATE, conferences.conference_date)
+        values.put(CONFERENCE_TIME, conferences.conference_time)
+        values.put(CONFERENCE_DURATION, conferences.conference_duration)
+        values.put(ESTIMATED_CALLERS, conferences.estimated_callers)
+        values.put(CONFERENCE_TYPE, conferences.conference_type)
+        values.put(ONLINE_LINK, conferences.online_link)
+        values.put(CONFERENCE_ADDRESS, conferences.conference_address)
+        values.put(CREATE_DATE, conferences.create_date)
+        values.put(CREATE_TIME, conferences.create_time)
+
+        val _success =
+            db.update(TABLE_NAME, values, ID_COL + "=?", arrayOf(conferences.id.toString()))
+                .toLong()
+        db.close()
+        return Integer.parseInt("$_success") != -1
+    }
+
+
+    @SuppressLint("Range")
+    fun getAllConference(): List<ConferenceListModel> {
+        val conference_list = ArrayList<ConferenceListModel>()
+        val db = this.writableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    val conferences = ConferenceListModel()
+                    conferences.id =
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID_COL)))
+                    conferences.profile_id = Integer.parseInt(
+                        cursor.getString(
+                            cursor.getColumnIndex(
+                                PROFILE_ID
+                            )
+                        )
+                    )
+                    conferences.conference_name = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_NAME
+                        )
+                    )
+                    conferences.conference_title = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_TITLE
+                        )
+                    )
+                    conferences.mail = cursor.getString(
+                        cursor.getColumnIndex(
+                            MAIL
+                        )
+                    )
+                    conferences.conference_date = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_DATE
+                        )
+                    )
+                    conferences.conference_time = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_TIME
+                        )
+                    )
+                    conferences.conference_duration = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_DURATION
+                        )
+                    )
+                    conferences.estimated_callers = Integer.parseInt(
+                        cursor.getString(
+                            cursor.getColumnIndex(
+                                ESTIMATED_CALLERS
+                            )
+                        )
+                    )
+                    conferences.conference_type = Integer.parseInt(
+                        cursor.getString(
+                            cursor.getColumnIndex(
+                                CONFERENCE_TYPE
+                            )
+                        )
+                    )
+                    conferences.online_link = cursor.getString(
+                        cursor.getColumnIndex(
+                            ONLINE_LINK
+                        )
+                    )
+                    conferences.conference_address = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_ADDRESS
+                        )
+                    )
+                    conferences.create_date = cursor.getString(
+                        cursor.getColumnIndex(
+                            CREATE_DATE
+                        )
+                    )
+                    conferences.create_time = cursor.getString(
+                        cursor.getColumnIndex(
+                            CREATE_TIME
+                        )
+                    )
+
+                    conference_list.add(conferences)
+                } while (cursor.moveToNext())
+            }
+        }
+        cursor.close()
+        return conference_list
+    }
+
+    @SuppressLint("Range")
+    fun getConference(_id: Int): ConferenceListModel {
+        val conferences = ConferenceListModel()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $ID_COL = $_id"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        cursor?.moveToFirst()
+        conferences.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID_COL)))
+        conferences.profile_id = Integer.parseInt(
+            cursor.getString(
+                cursor.getColumnIndex(
+                    PROFILE_ID
+                )
+            )
+        )
+        conferences.conference_name = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_NAME
+            )
+        )
+        conferences.conference_title = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_TITLE
+            )
+        )
+        conferences.mail = cursor.getString(
+            cursor.getColumnIndex(
+                MAIL
+            )
+        )
+        conferences.conference_date = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_DATE
+            )
+        )
+        conferences.conference_time = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_TIME
+            )
+        )
+        conferences.conference_duration = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_DURATION
+            )
+        )
+        conferences.estimated_callers = Integer.parseInt(
+            cursor.getString(
+                cursor.getColumnIndex(
+                    ESTIMATED_CALLERS
+                )
+            )
+        )
+        conferences.conference_type = Integer.parseInt(
+            cursor.getString(
+                cursor.getColumnIndex(
+                    CONFERENCE_TYPE
+                )
+            )
+        )
+        conferences.online_link = cursor.getString(
+            cursor.getColumnIndex(
+                ONLINE_LINK
+            )
+        )
+        conferences.conference_address = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_ADDRESS
+            )
+        )
+        conferences.create_date = cursor.getString(
+            cursor.getColumnIndex(
+                CREATE_DATE
+            )
+        )
+        conferences.create_time = cursor.getString(
+            cursor.getColumnIndex(
+                CREATE_TIME
+            )
+        )
+        cursor.close()
+        return conferences
+
+    }
+
+
+    fun deleteConference(firestoreId: String): Boolean {
+        firestoreDb.collection("conference").document(firestoreId)
+            .delete()
+            .addOnSuccessListener { Log.d("Firestore", "Dosya başarıyla silindi!") }
+            .addOnFailureListener { e -> Log.w("Firestore", "Dosya silinirken hata!", e) }
+
+        val db = this.writableDatabase
+
+        val _success = db.delete(TABLE_NAME, "firestore_id=?", arrayOf(firestoreId)).toLong()
+
+        db.close()
+        return Integer.parseInt("$_success") != -1
+    }
+
+    // PROFILE ACTIONS
+    fun getProfile(): Cursor? {
+
+        val db = this.readableDatabase
+
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME1, null)
+
     }
 
     fun addProfile(
@@ -193,21 +410,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.insert(TABLE_NAME2, null, values)
     }
 
-    fun getConference(): Cursor? {
-
-        val db = this.readableDatabase
-
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
-
-    }
-
-    fun getProfile(): Cursor? {
-
-        val db = this.readableDatabase
-
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME1, null)
-
-    }
 
     companion object {
         private val DATABASE_NAME = "KYS"
