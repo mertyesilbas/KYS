@@ -1,11 +1,13 @@
 package com.example.kys.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.kys.DBHelper
+import com.example.kys.MainActivity
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -163,6 +165,7 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                         "Koferans Başarıyla Oluşturuldu!",
                         Toast.LENGTH_SHORT
                     ).show()
+                    startActivity(Intent(requireActivity(), MainActivity::class.java))
                 } else {
                     Toast.makeText(
                         requireActivity(),

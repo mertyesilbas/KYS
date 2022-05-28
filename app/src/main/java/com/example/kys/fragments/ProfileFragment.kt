@@ -3,9 +3,12 @@ package com.example.kys.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import com.example.kys.ChangeProfileActivity
 import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.SignInActivity
@@ -44,11 +47,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             profileName.text = getProfileName.getString(0)
 
 //            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
+        }
 
+        binding.apply {
+            profileChangeName.setOnClickListener{
+               val intent = Intent(activity, ChangeProfileActivity::class.java)
+                startActivity(intent)
+            }
 
+            profileMail1.text = user.currentUser?.email.toString()
         }
 
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

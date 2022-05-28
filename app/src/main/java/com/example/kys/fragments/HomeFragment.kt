@@ -79,11 +79,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         getIsEmpty.getColumnIndex("conference_time")
                     )
 
-                    Toast.makeText(
-                        requireActivity(),
-                        getIsEmpty.count.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        requireActivity(),
+//                        getIsEmpty.count.toString(),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                     getIsEmpty.moveToNext()
 
 
@@ -100,7 +100,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             homeConfCancelButton.setOnClickListener{
                 db.deleteConference()
-                Toast.makeText(requireActivity(), "Konferans Silindi!", Toast.LENGTH_SHORT)
+//                Toast.makeText(requireActivity(), "Konferans Silindi!", Toast.LENGTH_SHORT)
                 val intent = Intent(requireActivity(), MainActivity::class.java)
                 startActivity(intent)
             }
