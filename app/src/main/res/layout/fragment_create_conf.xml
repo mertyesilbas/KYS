@@ -286,7 +286,19 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/conference_send"
                 android:textColor="@color/black"
-                android:textFontWeight="700"/>
+                android:textStyle="bold"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confDeleteButton"
+                style="@style/ThemeOverlay.Material3.Button"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/conference_delete"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:backgroundTint="@color/dark_blue"/>
 
         </LinearLayout>
 

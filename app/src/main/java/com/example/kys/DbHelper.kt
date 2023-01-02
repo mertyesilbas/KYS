@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.icu.number.IntegerWidth
 import android.util.Log
 import com.example.kys.model.ConferenceListModel
 import com.google.firebase.firestore.ktx.firestore
@@ -14,22 +13,21 @@ import com.google.firebase.ktx.Firebase
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
-    val firestoreDb = Firebase.firestore
+    private val firestoreDb = Firebase.firestore
 
     override fun onCreate(db: SQLiteDatabase) {
 
         val query = ("CREATE TABLE " + TABLE_NAME + " (" +
                 ID_COL + " INTEGER PRIMARY KEY, " +
                 PROFILE_ID + " INTEGER NOT NULL," +
-                FIRESTORE_ID + "TEXT," +
                 CONFERENCE_NAME + " TEXT," +
                 CONFERENCE_TITLE + " TEXT," +
                 MAIL + " TEXT," +
                 CONFERENCE_DATE + " TEXT," +
                 CONFERENCE_TIME + " TEXT," +
                 CONFERENCE_DURATION + " TEXT," +
-                ESTIMATED_CALLERS + " INTEGER," +
-                CONFERENCE_TYPE + " INTEGER," +
+                ESTIMATED_CALLERS + " TEXT," +
+                CONFERENCE_TYPE + " TEXT," +
                 ONLINE_LINK + " TEXT," +
                 CONFERENCE_ADDRESS + " TEXT," +
                 CREATE_DATE + " TEXT," +
@@ -75,9 +73,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     // CONFERENCE ACTIONS
     fun addConference(conferences: ConferenceListModel): Boolean {
-        var documentRef: String = ""
         // Firestore
         val conference = hashMapOf(
+            ID_COL to conferences.id,
             PROFILE_ID to conferences.profile_id,
             CONFERENCE_NAME to conferences.conference_name,
             CONFERENCE_TITLE to conferences.conference_title,
@@ -93,21 +91,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             CREATE_TIME to conferences.create_time
         )
 
-        firestoreDb.collection("conference")
-            .add(conference)
-            .addOnSuccessListener { documentReference ->
-                documentRef = documentReference.id
-                Log.d("Firestore", "ID ile Eklendi: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("Firestore", "Döküman eklerken hata: ", e)
-            }
+        firestoreDb.collection("conference").document(conferences.id.toString())
+            .set(conference)
+            .addOnSuccessListener { Log.d("Firestore", "Döküman başarıyla yazdırıldı!") }
+            .addOnFailureListener { e -> Log.w("Firestore", "Dökümanı yazarken hata!", e) }
 
         val values = ContentValues()
-
         values.put(PROFILE_ID, conferences.profile_id)
-        values.put(FIRESTORE_ID, documentRef)
-        values.put(CONFERENCE_NAME,conferences. conference_name)
+        values.put(CONFERENCE_NAME, conferences.conference_name)
         values.put(CONFERENCE_TITLE, conferences.conference_title)
         values.put(MAIL, conferences.mail)
         values.put(CONFERENCE_DATE, conferences.conference_date)
@@ -144,7 +135,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             CREATE_TIME to conferences.create_time
         )
 
-        firestoreDb.collection("conference").document(conferences.firestore_id)
+        firestoreDb.collection("conference").document(conferences.id.toString())
             .set(conference)
             .addOnSuccessListener { Log.d("Firestore", "Döküman başarıyla yazdırıldı!") }
             .addOnFailureListener { e -> Log.w("Firestore", "Dökümanı yazarken hata!", e) }
@@ -153,7 +144,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val values = ContentValues()
 
         values.put(PROFILE_ID, conferences.profile_id)
-        values.put(FIRESTORE_ID, conferences.firestore_id)
         values.put(CONFERENCE_NAME, conferences.conference_name)
         values.put(CONFERENCE_TITLE, conferences.conference_title)
         values.put(MAIL, conferences.mail)
@@ -225,18 +215,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                             CONFERENCE_DURATION
                         )
                     )
-                    conferences.estimated_callers = Integer.parseInt(
-                        cursor.getString(
-                            cursor.getColumnIndex(
-                                ESTIMATED_CALLERS
-                            )
+                    conferences.estimated_callers = cursor.getString(
+                        cursor.getColumnIndex(
+                            ESTIMATED_CALLERS
                         )
                     )
-                    conferences.conference_type = Integer.parseInt(
-                        cursor.getString(
-                            cursor.getColumnIndex(
-                                CONFERENCE_TYPE
-                            )
+                    conferences.conference_type = cursor.getString(
+                        cursor.getColumnIndex(
+                            CONFERENCE_TYPE
                         )
                     )
                     conferences.online_link = cursor.getString(
@@ -314,18 +300,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 CONFERENCE_DURATION
             )
         )
-        conferences.estimated_callers = Integer.parseInt(
-            cursor.getString(
-                cursor.getColumnIndex(
-                    ESTIMATED_CALLERS
-                )
+        conferences.estimated_callers = cursor.getString(
+            cursor.getColumnIndex(
+                ESTIMATED_CALLERS
             )
         )
-        conferences.conference_type = Integer.parseInt(
-            cursor.getString(
-                cursor.getColumnIndex(
-                    CONFERENCE_TYPE
-                )
+        conferences.conference_type = cursor.getString(
+            cursor.getColumnIndex(
+                CONFERENCE_TYPE
             )
         )
         conferences.online_link = cursor.getString(
@@ -354,15 +336,17 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
 
-    fun deleteConference(firestoreId: String): Boolean {
-        firestoreDb.collection("conference").document(firestoreId)
+    @SuppressLint("Range")
+    fun deleteConference(_id: Int): Boolean {
+
+        firestoreDb.collection("conference").document(_id.toString())
             .delete()
             .addOnSuccessListener { Log.d("Firestore", "Dosya başarıyla silindi!") }
             .addOnFailureListener { e -> Log.w("Firestore", "Dosya silinirken hata!", e) }
 
         val db = this.writableDatabase
 
-        val _success = db.delete(TABLE_NAME, "firestore_id=?", arrayOf(firestoreId)).toLong()
+        val _success = db.delete(TABLE_NAME, "id=?", arrayOf(_id.toString())).toLong()
 
         db.close()
         return Integer.parseInt("$_success") != -1
@@ -414,7 +398,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     companion object {
         private val DATABASE_NAME = "KYS"
 
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 6
 
         val TABLE_NAME = "conference"
         val TABLE_NAME1 = "profile"
@@ -423,8 +407,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val ID_COL = "id"
         val PROFILE_ID = "profile_id"
         val CONFERENCE_ID = "conference_id"
-        val FIRESTORE_ID = "firestore_id"
-
 
         val CONFERENCE_NAME = "conference_name"
         val CONFERENCE_TITLE = "conference_title"
