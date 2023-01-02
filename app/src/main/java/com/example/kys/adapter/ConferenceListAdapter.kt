@@ -48,7 +48,7 @@ class ConferenceListAdapter(
         val conferences = conferenceList[position]
         holder.conferenceName.text = conferences.conference_name
         holder.conferenceTitle.text = "Konu: " + conferences.conference_title
-        holder.conferenceDate.text ="Tarih: " + conferences.conference_date + " Saat" +conferences.conference_time
+        holder.conferenceDate.text ="Tarih: " + conferences.conference_date + " Saat: " +conferences.conference_time
         holder.conferenceDuration.text = "Süre: " + conferences.conference_duration
 
         holder.conferenceEdit.setOnClickListener {

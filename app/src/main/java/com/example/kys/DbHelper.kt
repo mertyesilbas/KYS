@@ -398,7 +398,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     companion object {
         private val DATABASE_NAME = "KYS"
 
-        private val DATABASE_VERSION = 4
+        private val DATABASE_VERSION = 6
 
         val TABLE_NAME = "conference"
         val TABLE_NAME1 = "profile"

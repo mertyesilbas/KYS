@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.*
+import androidx.fragment.app.FragmentManager
 import com.example.kys.DBHelper
 import com.example.kys.MainActivity
 import com.example.kys.R
@@ -185,6 +186,21 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                     success = dbHelper?.updateConference(conferences) as Boolean
                 } else {
                     // New Data
+                    // Get Current User id
+                    val db = DBHelper(requireActivity(), null)
+
+                    val dbQuery = db.readableDatabase
+                    val userUid = user.currentUser?.uid.toString()
+                    val query =
+                        "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
+
+                    val getProfileId = dbQuery.rawQuery(query, null)
+                    getProfileId.moveToFirst()
+
+                    val profileId = getProfileId.getInt(0)
+                    db.close()
+
+                    conferences.profile_id = profileId
                     conferences.conference_name = conferenceName.text.toString()
                     conferences.conference_title = conferenceTitle.text.toString()
                     conferences.mail = mail.text.toString()
@@ -216,8 +232,12 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                     success = dbHelper?.addConference(conferences) as Boolean
                 }
                 if (success) {
-                    val i = Intent(requireContext(), HomeFragment::class.java)
-                    startActivity(i)
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.mainFrame, HomeFragment())
+                    transaction?.disallowAddToBackStack()
+                    transaction?.commit()
+//                    val i = Intent(requireContext(), HomeFragment::class.java)
+//                    startActivity(i)
                 } else {
                     Toast.makeText(requireContext(), "Konferans eklenenemedi!", Toast.LENGTH_SHORT)
                 }
@@ -245,54 +265,54 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 dialog.show()
             }
 
-            confSendButton.setOnClickListener{
-                // Get Current User id
-                val db = DBHelper(requireActivity(), null)
-
-                val dbQuery = db.readableDatabase
-                val userUid = user.currentUser?.uid.toString()
-                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
-
-                val getProfileId = dbQuery.rawQuery(query, null)
-                getProfileId.moveToFirst()
-
-                val profileId = getProfileId.getInt(0)
-                db.close()
-
-                val conferences: ConferenceListModel = ConferenceListModel()
-                conferences.profile_id = profileId
-                conferences.conference_name = conferenceName.text.toString()
-                conferences.conference_title = conferenceTitle.text.toString()
-                conferences.mail = mail.text.toString()
-                conferences.conference_date = conferenceDate.text.toString()
-                conferences.conference_time = conferenceTime.text.toString()
-                conferences.conference_duration = conferenceDuration.text.toString()
-                conferences.estimated_callers = estimatedCallers.text.toString()
-                conferences.conference_type =
-                    conferenceType.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
-                        .toString()
-                conferences.online_link = onlineLink.text.toString()
-                conferences.conference_address = address.text.toString()
-
-                if (conferences.conference_type == "confRadioButton1") {
-                    conferences.conference_type = "1"
-                }
-                if (conferences.conference_type == "confRadioButton2") {
-                    conferences.conference_type = "2"
-                }
-                if (conferences.conference_type == "confRadioButton3") {
-                    conferences.conference_type = "3"
-                }
-
-                val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
-                val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
-                conferences.create_date = sdfDate.toString()
-                conferences.create_time = sdfTime.toString()
-
-                dbHelper?.addConference(conferences)
-
-                startActivity(Intent(requireActivity(), MainActivity::class.java))
-            }
+//            confSendButton.setOnClickListener{
+//                // Get Current User id
+//                val db = DBHelper(requireActivity(), null)
+//
+//                val dbQuery = db.readableDatabase
+//                val userUid = user.currentUser?.uid.toString()
+//                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
+//
+//                val getProfileId = dbQuery.rawQuery(query, null)
+//                getProfileId.moveToFirst()
+//
+//                val profileId = getProfileId.getInt(0)
+//                db.close()
+//
+//                val conferences: ConferenceListModel = ConferenceListModel()
+//                conferences.profile_id = profileId
+//                conferences.conference_name = conferenceName.text.toString()
+//                conferences.conference_title = conferenceTitle.text.toString()
+//                conferences.mail = mail.text.toString()
+//                conferences.conference_date = conferenceDate.text.toString()
+//                conferences.conference_time = conferenceTime.text.toString()
+//                conferences.conference_duration = conferenceDuration.text.toString()
+//                conferences.estimated_callers = estimatedCallers.text.toString()
+//                conferences.conference_type =
+//                    conferenceType.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
+//                        .toString()
+//                conferences.online_link = onlineLink.text.toString()
+//                conferences.conference_address = address.text.toString()
+//
+//                if (conferences.conference_type == "confRadioButton1") {
+//                    conferences.conference_type = "1"
+//                }
+//                if (conferences.conference_type == "confRadioButton2") {
+//                    conferences.conference_type = "2"
+//                }
+//                if (conferences.conference_type == "confRadioButton3") {
+//                    conferences.conference_type = "3"
+//                }
+//
+//                val sdfDate = SimpleDateFormat("dd/M/yyyy", Locale("tr"))
+//                val sdfTime = SimpleDateFormat("HH:mm:ss", Locale("tr"))
+//                conferences.create_date = sdfDate.toString()
+//                conferences.create_time = sdfTime.toString()
+//
+//                dbHelper?.addConference(conferences)
+//
+//                startActivity(Intent(requireActivity(), MainActivity::class.java))
+//            }
         }
 
 //        binding.apply {

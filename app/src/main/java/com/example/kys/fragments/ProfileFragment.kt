@@ -42,7 +42,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
             profileName.text = getProfileName.getString(0)
-
+            db.close()
 //            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
         }
 
