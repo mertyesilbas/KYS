@@ -2,6 +2,8 @@ package com.example.kys.model
 
 class ConferenceListModel {
     var id: Int = 0
+    var profile_id: Int = 0
+    var firestore_id = ""
     var conference_name: String = ""
     var conference_title: String = ""
     var mail: String = ""

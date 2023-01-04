@@ -2,17 +2,15 @@ package com.example.kys.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import com.example.kys.DBHelper
 import com.example.kys.MainActivity
 import com.example.kys.R
-import com.example.kys.data.Conference
 import com.example.kys.databinding.FragmentCreateConfBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_create_conf.*
 import kotlinx.android.synthetic.main.fragment_create_conf.view.*
 import java.text.SimpleDateFormat
@@ -22,13 +20,11 @@ import java.util.*
 class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
     private var _binding: FragmentCreateConfBinding? = null
     private val binding get() = _binding!!
-    private lateinit var database: DatabaseReference
 
     override fun onResume() {
         super.onResume()
         binding.apply {
-            val durations =
-                resources.getStringArray(R.array.durations) // Süreleri arrray olarak getirdik.
+            val durations = resources.getStringArray(R.array.durations)
             val arrayAdapter = ArrayAdapter(requireContext(), R.layout.conf_duration, durations)
             binding.confDurationTextView.setAdapter(arrayAdapter)
         }
@@ -53,6 +49,8 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCreateConfBinding.bind(view)
+
+        val user = FirebaseAuth.getInstance()
 
         binding.apply {
             confDateTextInputLayout.setEndIconOnClickListener {
@@ -101,28 +99,28 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 val conferenceDate = confDateTextInputLayout.editText?.text.toString()
                 val conferenceTime = confTimeTextInputLayout.editText?.text.toString()
                 val conferenceDuration = confDurationTextInputLayout.editText?.text.toString()
-                var estimatedCallers: String = "0"
+                var estimatedCallers: Int = 0
                 if (confEstTextInputLayout.editText?.text.toString().trim().length > 0) {
-                    estimatedCallers = confEstTextInputLayout.editText?.text.toString()
+                    estimatedCallers = confEstTextInputLayout.editText?.text.toString().toInt()
                 }
                 val conferenceType =
                     confRadioGroup.resources.getResourceEntryName(confRadioGroup.checkedRadioButtonId)
                         .toString()
-                var conferenceType1: String = "Online"
+                var conferenceType1: Int = 0
                 var onlineLink: String = ""
                 var address: String = ""
                 if (conferenceType == "confRadioButton1") {
-                    conferenceType1 = "Online"
+                    conferenceType1 = 1
                     onlineLink = confOnlineTextInputLayout.editText?.text.toString()
                     address = ""
                 }
                 if (conferenceType == "confRadioButton2") {
-                    conferenceType1 = "Yüz Yüze"
+                    conferenceType1 = 2
                     onlineLink = ""
                     address = confAddressTextInputLayout.editText?.text.toString()
                 }
                 if (conferenceType == "confRadioButton3") {
-                    conferenceType1 = "Karma"
+                    conferenceType1 = 3
                     onlineLink = confOnlineTextInputLayout.editText?.text.toString()
                     address = confAddressTextInputLayout.editText?.text.toString()
                 }
@@ -133,13 +131,22 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 val createTime = sdfTime.format(Date())
 
                 // Database
+                val db = DBHelper(requireActivity(), null)
+
+                val dbQuery = db.readableDatabase
+                val userUid = user.currentUser?.uid.toString()
+                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
+
+                val getProfileId = dbQuery.rawQuery(query, null)
+                getProfileId.moveToFirst()
+
+                val profileId = getProfileId.getInt(0)
 
 
-                if ((conferenceName.trim().length > 0) && (conferenceTitle.trim().length > 0) && (mail.trim().length > 0) && (conferenceDate.trim().length > 0) && (conferenceTime.trim().length > 0) && (conferenceDuration.trim().length > 0) && ((onlineLink.trim().length > 0) || (address.trim().length > 0))
+                if ((conferenceName.trim().length > 0) && (conferenceTitle.trim().length > 0) && (mail.trim().length > 0) && (conferenceDate.trim().length > 0) && (conferenceTime.trim().length > 0) && (conferenceDuration.trim().length>0) && ((onlineLink.trim().length>0) || (address.trim().length>0))
                 ) {
-                    // Database'e konferansın yazılacağı alan
-                    database = FirebaseDatabase.getInstance().getReference("Conferences")
-                    val Conference = Conference(
+                    db.addConference(
+                        profileId,
                         conferenceName,
                         conferenceTitle,
                         mail,
@@ -153,23 +160,12 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                         createDate,
                         createTime
                     )
-                    database.child(conferenceName).setValue(Conference).addOnSuccessListener {
-
-                        Toast.makeText(
-                            requireActivity(),
-                            "Koferans Başarıyla Oluşturuldu!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }.addOnFailureListener{
-                        Toast.makeText(
-                            requireActivity(),
-                            "Konferans Oluşturulamadı",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    startActivity(
-                        Intent(requireActivity(), MainActivity::class.java)
-                    )
+                    Toast.makeText(
+                        requireActivity(),
+                        "Koferans Başarıyla Oluşturuldu!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(Intent(requireActivity(), MainActivity::class.java))
                 } else {
                     Toast.makeText(
                         requireActivity(),

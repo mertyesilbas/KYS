@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.kys.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
-    private lateinit var database: DatabaseReference
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +19,8 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val intent = Intent(this, SignInActivity::class.java)
+        val user = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.textView.setOnClickListener {
             startActivity(intent)
@@ -32,12 +32,11 @@ class SignUpActivity : AppCompatActivity() {
 
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty()) {
                 if (pass == confirmPass) {
-                    database = FirebaseDatabase.getInstance().getReference("Users")
-
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             Toast.makeText(this, "Başarıyla Kayıt Oldunuz!", Toast.LENGTH_SHORT).show()
                             // Creating User Profile
+                            val db = DBHelper(this,null)
 
                             val userName = user.currentUser?.email.toString()
                             val userName1: String = userName.substringBefore("@")
@@ -50,6 +49,7 @@ class SignUpActivity : AppCompatActivity() {
                             val createTime = sdfTime.format(Date())
                             val userUid = user.currentUser?.uid.toString()
 
+                            db.addProfile(userName1, profilePhoto, createDate, createTime, userUid)
 
                             startActivity(intent)
                         } else {
