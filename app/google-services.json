@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "598110136742",
+    "firebase_url": "https://konferans-yonetim-sistemi-default-rtdb.firebaseio.com",
     "project_id": "konferans-yonetim-sistemi",
     "storage_bucket": "konferans-yonetim-sistemi.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "598110136742-s6s02b739nc017gv321ee9vmjos9t4ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kys",
+            "certificate_hash": "24603f16db7048a7a7dc8ab0caa89e561f587008"
+          }
+        },
         {
           "client_id": "598110136742-ielk5tls3dappcfovq63nhqp5l8to9os.apps.googleusercontent.com",
           "client_type": 3
