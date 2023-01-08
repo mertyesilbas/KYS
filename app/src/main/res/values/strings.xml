@@ -2,7 +2,7 @@
     <string name="app_name">KYS</string>
     <!--    Bottom Navigation Strings   -->
     <string name="conf">Konferans</string>
-    <string name="create_conf">Yeni Koferans</string>
+    <string name="create_conf">Yeni Konferans</string>
     <string name="profile">Profilim</string>
     <!--           Home Strings         -->
     <string name="home_welcome">Hoşgeldin</string>
@@ -13,7 +13,7 @@
     <string name="conference_required">Gerekli</string>
     <string name="conference_date">Konferans Tarihi</string>
     <string name="conference_hour">Konferans Saati</string>
-    <string name="conference_duration">Koferans Süresi</string>
+    <string name="conference_duration">Konferans Süresi</string>
     <!--    Conference Duration Times   -->
     <string name="half_an_hour">30 Dakika</string>
     <string name="three_quarter">45 Dakika</string>
@@ -55,6 +55,7 @@
     <string name="conference_address">Adres</string>
     <string name="conference_link">Online Katılım Link</string>
     <string name="conference_send">Gönder</string>
+    <string name="conference_delete">Sil</string>
     <!--    LogIn/SignUp Strings    -->
     <string name="login_type_email">Email\'inizi Giriniz</string>
     <string name="login_type_password">Şifrenizi Giriniz</string>

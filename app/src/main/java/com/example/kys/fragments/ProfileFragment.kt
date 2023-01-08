@@ -3,11 +3,8 @@ package com.example.kys.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
 import com.example.kys.ChangeProfileActivity
 import com.example.kys.DBHelper
 import com.example.kys.R
@@ -45,7 +42,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
             profileName.text = getProfileName.getString(0)
-
+            db.close()
 //            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
         }
 

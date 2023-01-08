@@ -40,6 +40,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
         bottomNavigationView.selectedItemId = R.id.home
+
+        if (intent != null && intent.getStringExtra("Mode") == "E") {
+            val args = Bundle()
+            args.putString("Mode", "E")
+            args.putString("Id", intent.getIntExtra("Id", 0).toString())
+            val fragment = CreateConfFragment()
+            fragment.arguments = args
+            fragmentManager.beginTransaction().replace(R.id.mainFrame, fragment).commit()
+        }
     }
 
 
