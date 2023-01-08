@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.kys.DBHelper
 import com.example.kys.MainActivity
 import com.example.kys.R
 import com.example.kys.databinding.FragmentCreateConfBinding
@@ -131,16 +130,7 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
                 val createTime = sdfTime.format(Date())
 
                 // Database
-                val db = DBHelper(requireActivity(), null)
 
-                val dbQuery = db.readableDatabase
-                val userUid = user.currentUser?.uid.toString()
-                val query = "SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
-
-                val getProfileId = dbQuery.rawQuery(query, null)
-                getProfileId.moveToFirst()
-
-                val profileId = getProfileId.getInt(0)
 
 
                 if ((conferenceName.trim().length > 0) && (conferenceTitle.trim().length > 0) && (mail.trim().length > 0) && (conferenceDate.trim().length > 0) && (conferenceTime.trim().length > 0) && (conferenceDuration.trim().length>0) && ((onlineLink.trim().length>0) || (address.trim().length>0))

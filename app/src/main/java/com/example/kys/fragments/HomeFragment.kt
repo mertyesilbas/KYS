@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.adapter.ConferenceListAdapter
 import com.example.kys.databinding.FragmentHomeBinding
@@ -20,7 +19,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //    private var parentLinearLayout: LinearLayout? = null
     lateinit var recycler_conference: RecyclerView
     var conferenceListAdapter: ConferenceListAdapter ?= null
-    var dbHelper: DBHelper ?= null
     var conferenceList: List<ConferenceListModel> = ArrayList<ConferenceListModel>()
     var linearLayoutManager: LinearLayoutManager ?= null
 
@@ -35,30 +33,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         recycler_conference = rv_list
 
         binding.apply {
-            val db = DBHelper(requireActivity(),null)
-
-            val dbQuery = db.readableDatabase
-            val userUid = user.currentUser?.uid.toString()
-            val queryUsername =
-                "SELECT username FROM profile WHERE profile.user_uid = " + "'" + userUid + "'"
-            val queryAll =
-                "SELECT * FROM conference WHERE conference.profile_id = (SELECT id FROM profile WHERE profile.user_uid = " + "'" + userUid + "'" + ")"
-
-
-            val getProfileName = dbQuery.rawQuery(queryUsername, null)
-            val getIsEmpty = dbQuery.rawQuery(queryAll, null)
-            getProfileName.moveToFirst()
-            getIsEmpty.moveToFirst()
-
-
-            if (getProfileName.count.toString() != "0") {
-                homeWelcomeTextView.text = "Hoşgeldin " + getProfileName.getString(0) + "!"
-            }
-
-            dbHelper = DBHelper(requireContext(), null)
-            fetchList()
-
-
 
 
 //            if (getIsEmpty.count.toString() == "0") {
@@ -118,7 +92,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun fetchList() {
-        conferenceList = dbHelper!!.getAllConference()
         conferenceListAdapter = ConferenceListAdapter(conferenceList,requireContext())
         linearLayoutManager = LinearLayoutManager(requireContext())
         recycler_conference.layoutManager = linearLayoutManager

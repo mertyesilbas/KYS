@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import com.example.kys.ChangeProfileActivity
-import com.example.kys.DBHelper
 import com.example.kys.R
 import com.example.kys.SignInActivity
 import com.example.kys.databinding.FragmentProfileBinding
@@ -31,18 +30,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.apply {
-            val db = DBHelper(requireActivity(),null)
-
-            val dbQuery = db.readableDatabase
-            val userUid = user.currentUser?.uid.toString()
-            val query = "SELECT username FROM profile WHERE profile.user_uid = " + "'"+ userUid + "'"
-
-            val getProfileName = dbQuery.rawQuery(query , null)
-            getProfileName.moveToFirst()
 
             profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
-            profileName.text = getProfileName.getString(0)
-            db.close()
+
 //            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
         }
 

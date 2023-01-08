@@ -36,7 +36,6 @@ class SignUpActivity : AppCompatActivity() {
                         if (it.isSuccessful) {
                             Toast.makeText(this, "Başarıyla Kayıt Oldunuz!", Toast.LENGTH_SHORT).show()
                             // Creating User Profile
-                            val db = DBHelper(this,null)
 
                             val userName = user.currentUser?.email.toString()
                             val userName1: String = userName.substringBefore("@")
@@ -49,7 +48,6 @@ class SignUpActivity : AppCompatActivity() {
                             val createTime = sdfTime.format(Date())
                             val userUid = user.currentUser?.uid.toString()
 
-                            db.addProfile(userName1, profilePhoto, createDate, createTime, userUid)
 
                             startActivity(intent)
                         } else {

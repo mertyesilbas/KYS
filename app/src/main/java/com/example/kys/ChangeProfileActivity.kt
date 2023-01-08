@@ -17,14 +17,8 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         newUsernameButton.setOnClickListener {
             val newUsername = newUsername.editText?.text.toString()
-            val db = DBHelper(this, null)
 
-            val dbQuery = db.writableDatabase
-            val userUid = user.currentUser?.uid.toString()
-            val query =
-                "UPDATE profile SET username = " + "'" + newUsername + "'" + " WHERE profile.user_uid = " + "'" + userUid + "'"
 
-            dbQuery.execSQL(query)
             startActivity(intent)
 
         }

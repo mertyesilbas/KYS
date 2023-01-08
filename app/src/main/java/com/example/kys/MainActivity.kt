@@ -14,13 +14,13 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     // [START declare_auth]
-    private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseAuth: FirebaseAuth
     // [END declare_auth]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        firebaseAuth = FirebaseAuth.getInstance()
 
         val fragmentManager: FragmentManager = supportFragmentManager
 
@@ -51,25 +51,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        if(fragment !=null){
-//            val transaction = supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.mainFrame, fragment)
-//            transaction.commit()
-//        }
-//    }
-
     // [START on_start_check_user]
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-            Intent(this, SignInActivity::class.java)
-        }
+        validateCurrentUser()
     }
 
+    fun validateCurrentUser(){
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+    }
     // [END on_start_check_user]
 
     override fun onDestroy() {
