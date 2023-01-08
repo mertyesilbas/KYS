@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.kys.databinding.ActivitySignInBinding
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +24,13 @@ class SignInActivity : AppCompatActivity() {
 
         val intent = Intent(this, SignUpActivity::class.java)
 
-        firebaseAuth = FirebaseAuth.getInstance()
-//        firebaseAuth.signOut()
-        binding.textView.setOnClickListener {
+        binding.redirectSignUpBtn.setOnClickListener {
             startActivity(intent)
         }
+        firebaseAuth = FirebaseAuth.getInstance()
+//        firebaseAuth.signOut()
 
+        // Logging in with normal entrance
         binding.loginButton.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val pass = binding.passET.text.toString()
@@ -42,6 +48,20 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Bütün alanları doldurunuz!", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Logging in with google sign in entrance
+//        oneTapClient = Identity.getSignInClient(this)
+//        signInRequest = BeginSignInRequest.Builder()
+//            .setGoogleIdTokenRequestOptions(
+//                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+//                    .setSupported(true)
+//                    .setServerClientId(getString(R.string.your_web_client_id))
+//                    .setFilterByAuthorizedAccounts(true)
+//                    .build()
+//            )
+//            .setAutoSelectEnabled(true)
+//            .build()
+
 
     }
 

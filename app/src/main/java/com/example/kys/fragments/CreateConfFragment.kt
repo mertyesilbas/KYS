@@ -145,21 +145,6 @@ class CreateConfFragment : Fragment(R.layout.fragment_create_conf) {
 
                 if ((conferenceName.trim().length > 0) && (conferenceTitle.trim().length > 0) && (mail.trim().length > 0) && (conferenceDate.trim().length > 0) && (conferenceTime.trim().length > 0) && (conferenceDuration.trim().length>0) && ((onlineLink.trim().length>0) || (address.trim().length>0))
                 ) {
-                    db.addConference(
-                        profileId,
-                        conferenceName,
-                        conferenceTitle,
-                        mail,
-                        conferenceDate,
-                        conferenceTime,
-                        conferenceDuration,
-                        estimatedCallers,
-                        conferenceType1,
-                        onlineLink,
-                        address,
-                        createDate,
-                        createTime
-                    )
                     Toast.makeText(
                         requireActivity(),
                         "Koferans Başarıyla Oluşturuldu!",
