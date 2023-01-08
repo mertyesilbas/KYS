@@ -10,43 +10,51 @@ import com.example.kys.R
 import com.example.kys.SignInActivity
 import com.example.kys.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentProfileBinding.bind(view)
 
-        val user = FirebaseAuth.getInstance()
         val intent = Intent(activity, SignInActivity::class.java)
 
-        binding.apply {
-            logoutButton.setOnClickListener{
-                FirebaseAuth.getInstance().signOut()
-                startActivity(intent)
-            }
+
+        // [START access_user_info]
+        val user = Firebase.auth.currentUser
+        user?.let {
+            // Name, email address, and profile photo Url
+            val name = user.displayName
+            val email = user.email
+            val photoUrl = user.photoUrl
+
+            // Check if user's email is verified
+            val emailVerified = user.isEmailVerified
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getToken() instead.
+            val uid = user.uid
         }
+        // [STOP access_user_info]
+        binding
+        binding.profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
 
-        binding.apply {
+        binding.profileName.text = user?.uid.toString()
 
-            profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
+        binding.profileMail1.text = user?.email.toString()
 
-//            Toast.makeText(activity, getProfileName.getString(0), Toast.LENGTH_SHORT).show()
-        }
 
-        binding.apply {
-            profileChangeName.setOnClickListener{
-               val intent = Intent(activity, ChangeProfileActivity::class.java)
-                startActivity(intent)
-            }
-
-            profileMail1.text = user.currentUser?.email.toString()
+        binding.logoutButton.setOnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            startActivity(intent)
         }
 
     }
-
 
 
     override fun onDestroyView() {
