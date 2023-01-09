@@ -9,8 +9,13 @@ import com.example.kys.databinding.ActivitySignInBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -19,6 +24,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +36,17 @@ class SignInActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         firebaseAuth = Firebase.auth
         // [END initialize_auth]
+
+        // [START config_signin]
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        // [END config_signin]
+
 
         // Logging in with normal entrance
         // [START Logging In Normal]
@@ -46,31 +63,64 @@ class SignInActivity : AppCompatActivity() {
 //                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
 //                    }
 //                }
-                signIn(email,pass)
+                signIn(email, pass)
             } else {
                 Toast.makeText(this, "Bütün alanları doldurunuz!", Toast.LENGTH_SHORT).show()
             }
         }
         // [END Logging In Normal]
 
-        // Logging in with google sign in entrance
-//        oneTapClient = Identity.getSignInClient(this)
-//        signInRequest = BeginSignInRequest.Builder()
-//            .setGoogleIdTokenRequestOptions(
-//                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                    .setSupported(true)
-//                    .setServerClientId(getString(R.string.your_web_client_id))
-//                    .setFilterByAuthorizedAccounts(true)
-//                    .build()
-//            )
-//            .setAutoSelectEnabled(true)
-//            .build()
-
+        binding.googleSignBtn.setOnClickListener {
+            signInGoogle()
+        }
         binding.redirectSignUpBtn.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
     }
+
+    // Logging in with google sign in entrance
+    // [START Logging In Google]
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 9001) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d("GoogleActivity", "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("GoogleActivity", "Google sign in failed", e)
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("GoogleActivity", "signInWithCredential:success")
+                    val user = firebaseAuth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("GoogleActivity", "signInWithCredential:failure", task.exception)
+                    updateUI(null)
+                }
+            }
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, 9001)
+    }
+    // [END Logging In Google]
 
     override fun onStart() {
         super.onStart()
@@ -97,17 +147,26 @@ class SignInActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("EmailPassword", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Giriş Yapılamadı",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "Giriş Yapılamadı",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     updateUI(null)
                 }
             }
         // [END sign_in_with_email]
     }
 
+    // [START signin]
+    private fun signInGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, 9001)
+    }
+    // [END signin]
+
     private fun updateUI(user: FirebaseUser?) {
-        if(user != null){
-            startActivity(Intent(this,MainActivity::class.java))
+        if (user != null) {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }

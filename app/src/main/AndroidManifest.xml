@@ -10,17 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KYS">
         <activity
-            android:name=".FirebaseUIActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".AddConferenceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ChangeProfileActivity"
             android:exported="false" />
         <activity
             android:name=".SignInActivity"
