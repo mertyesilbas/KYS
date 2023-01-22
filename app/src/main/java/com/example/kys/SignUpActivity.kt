@@ -24,7 +24,6 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val intent = Intent(this, SignInActivity::class.java)
-        val user = FirebaseAuth.getInstance()
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.redirectSignInBtn.setOnClickListener {
@@ -58,10 +57,10 @@ class SignUpActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("EmailPassword", "createUserWithEmail:success")
                     val user = firebaseAuth.currentUser
-                    val CUname = null
-                    val CUemail = user?.email  // CU stands for Current User
-                    val CUuid = user!!.uid
-                    createAccountOnDatabase(CUuid,CUname,CUemail)
+                    val cuName = null
+                    val cuEmail = user?.email  // CU stands for Current User
+                    val cuUid = user!!.uid
+                    createAccountOnDatabase(cuUid,cuName,cuEmail)
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.

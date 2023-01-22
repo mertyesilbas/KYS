@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.protobuf.NullValue
-import com.google.protobuf.Value
 
 @Suppress("DEPRECATION")
 class SignInActivity : AppCompatActivity() {
@@ -113,18 +111,18 @@ class SignInActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("GoogleActivity", "signInWithCredential:success")
                     val user = firebaseAuth.currentUser
-                    val CUname = null
-                    val CUemail = user?.email  // CU stands for Current User
-                    val CUuid = user!!.uid
+                    val cuName = null
+                    val cuEmail = user?.email  // CU stands for Current User
+                    val cuUid = user!!.uid
                     // [START is_user_in_database]
                     // if (user.uid)
                     database = Firebase.database.reference
                     val valueEventListener = object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.child("Users").child(user?.uid.toString()).exists()){
+                            if (snapshot.child("Users").child(user.uid).exists()){
                                 Log.d("GoogleSignIn","Successful")
                             }else{
-                                createAccountOnDatabase(CUuid,CUname,CUemail)
+                                createAccountOnDatabase(cuUid,cuName,cuEmail)
                             }
                         }
 
