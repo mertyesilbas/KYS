@@ -1,14 +1,12 @@
 package com.example.kys
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kys.databinding.ActivitySignInBinding
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
+import com.example.kys.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -17,14 +15,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.protobuf.NullValue
+import com.google.protobuf.Value
 
+@Suppress("DEPRECATION")
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +86,8 @@ class SignInActivity : AppCompatActivity() {
 
     // Logging in with google sign in entrance
     // [START Logging In Google]
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    @Deprecated("Deprecated in Java")
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -107,6 +113,27 @@ class SignInActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("GoogleActivity", "signInWithCredential:success")
                     val user = firebaseAuth.currentUser
+                    val CUname = null
+                    val CUemail = user?.email  // CU stands for Current User
+                    val CUuid = user!!.uid
+                    // [START is_user_in_database]
+                    // if (user.uid)
+                    database = Firebase.database.reference
+                    val valueEventListener = object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.child("Users").child(user?.uid.toString()).exists()){
+                                Log.d("GoogleSignIn","Successful")
+                            }else{
+                                createAccountOnDatabase(CUuid,CUname,CUemail)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.d("GoogleSıgnIn","Canceled")
+                        }
+                    }
+                    database.addValueEventListener(valueEventListener)
+                    // [END is_user_in_database]
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -116,10 +143,15 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
-    private fun signIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, 9001)
+    private fun createAccountOnDatabase(useruid: String, name: String?, email: String?) {
+        database = Firebase.database.reference
+        val user = User(name, email)
+        database.child("Users").child(useruid).setValue(user)
     }
+//    private fun signIn() {
+//        val signInIntent = googleSignInClient.signInIntent
+//        startActivityForResult(signInIntent, 9001)
+//    }
     // [END Logging In Google]
 
     override fun onStart() {
