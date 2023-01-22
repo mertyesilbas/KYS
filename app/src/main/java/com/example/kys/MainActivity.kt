@@ -1,5 +1,6 @@
 package com.example.kys
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,12 +13,14 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
-
+    // [START declare_auth]
+    private lateinit var firebaseAuth: FirebaseAuth
+    // [END declare_auth]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        firebaseAuth = FirebaseAuth.getInstance()
 
         val fragmentManager: FragmentManager = supportFragmentManager
 
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
             lateinit var fragment: Fragment
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.home -> fragment = homeFragment
                 R.id.createConf -> fragment = createConfFragment
                 R.id.profile -> fragment = profileFragment
@@ -48,19 +51,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // [START on_start_check_user]
+    override fun onStart() {
+        super.onStart()
+        validateCurrentUser()
+    }
 
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        if(fragment !=null){
-//            val transaction = supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.mainFrame, fragment)
-//            transaction.commit()
-//        }
-//    }
+    fun validateCurrentUser(){
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    // [END on_start_check_user]
 
     override fun onDestroy() {
         super.onDestroy()
         val user = FirebaseAuth.getInstance()
         user.signOut()
     }
+
 }
