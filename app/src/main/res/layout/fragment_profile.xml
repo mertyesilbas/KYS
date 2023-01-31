@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
+    <ImageButton
+        android:id="@+id/profileUpdate"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/profile_edit"
+        android:backgroundTint="@color/black"
+        android:contentDescription="@string/update_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -96,8 +107,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
+            android:layout_height="wrap_content">
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/profileName"
                 android:layout_width="250dp"
@@ -110,15 +120,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-            <ImageButton
-                android:id="@+id/profileChangeName"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="10dp"
-                android:backgroundTint="@color/black"
-                android:background="@drawable/profile_edit"
-                app:layout_constraintStart_toEndOf="@id/profileName"
-                app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

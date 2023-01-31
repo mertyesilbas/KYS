@@ -21,25 +21,26 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val intent = Intent(activity, SignInActivity::class.java)
 
+        binding.profileUpdate.setOnClickListener{
 
+        }
         // [START access_user_info]
         val user = Firebase.auth.currentUser
-        user?.let {
-            // Name, email address, and profile photo Url
-            val name = user.displayName
-            val email = user.email
-            val photoUrl = user.photoUrl
+        // Name, email address, and profile photo Url
+        val name = user!!.displayName
+        val email = user.email
+        val photoUrl = user.photoUrl
 
-            // Check if user's email is verified
-            val emailVerified = user.isEmailVerified
+        // Check if user's email is verified
+        val emailVerified = user.isEmailVerified
 
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getToken() instead.
-            val uid = user.uid
-        }
+        // The user's ID, unique to the Firebase project. Do NOT use this value to
+        // authenticate with your backend server, if you have one. Use
+        // FirebaseUser.getToken() instead.
+        val uid = user.uid
         // [STOP access_user_info]
-        binding
+
+
         binding.profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
 
         binding.profileName.text = user?.uid.toString()
@@ -53,7 +54,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
