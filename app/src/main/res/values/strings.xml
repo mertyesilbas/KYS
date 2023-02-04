@@ -74,6 +74,10 @@
     <string name="profile_change_photo">Fotoğrafı Değiştir</string>
     <!--    Edit Profile Dialog     -->
     <string name="profile_edit">Profili Değiştir</string>
+    <string name="profile_edit_username">Kullanıcı Adı: </string>
+    <string name="profile_edit_photo">Fotoğraf: </string>
+    <string name="profile_edit_photo_upload">Yükle</string>
+    <string name="profile_edit_update">Güncelle</string>
     <!--    Home Strings        -->
     <string name="home_conferences">Konferanslar</string>
     <string name="home_conf_join">Katıl</string>
