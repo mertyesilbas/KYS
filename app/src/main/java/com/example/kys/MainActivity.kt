@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
     // [END on_start_check_user]
-
     override fun onDestroy() {
         super.onDestroy()
         val user = FirebaseAuth.getInstance()

@@ -43,6 +43,7 @@
             app:srcCompat="@mipmap/ic_profile_photo_foreground" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_profile_upload_btn"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"

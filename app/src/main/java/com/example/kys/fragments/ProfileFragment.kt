@@ -1,6 +1,8 @@
 package com.example.kys.fragments
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,22 +18,29 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var database: DatabaseReference
+    private lateinit var storageReference: StorageReference
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentProfileBinding.bind(view)
         database = FirebaseDatabase.getInstance().getReference("Users")
+        storageReference = Firebase.storage.reference
 
         val intent = Intent(activity, SignInActivity::class.java)
 
         // [START access_user_info]
         val user = Firebase.auth.currentUser
+
         // Name, email address, and profile photo Url
         val name = user!!.displayName
         val email = user.email
@@ -45,9 +54,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         // FirebaseUser.getToken() instead.
         val uid = user.uid
         // [STOP access_user_info]
-
-
-        binding.profileImageView.setImageResource(R.mipmap.ic_profile_photo_foreground)
+        storageReference =
+            FirebaseStorage.getInstance().getReference("images/ic_profile_photo_round.png")
+        Log.d("STORAGE", storageReference.toString())
+        val localFile = File.createTempFile("image", "png")
+        storageReference.getFile(localFile).addOnSuccessListener {
+            binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(localFile.absolutePath))
+        }
+//        binding.profileImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.ic_profile_photo))
 
         binding.profileName.text = user.displayName.toString()
 
@@ -55,13 +69,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         binding.profileUpdate.setOnClickListener {
             EditProfileDialog(
-                onSubmitClickListener = { username ->
+                onSubmitClickListener = { username, photoUrl ->
                     // Updating Firebase Auth
                     val profileUpdates = userProfileChangeRequest {
                         displayName = username
+                        photoUri = Uri.parse(photoUrl)
                     }
 
-                    user!!.updateProfile(profileUpdates)
+                    user.updateProfile(profileUpdates)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Log.d(
