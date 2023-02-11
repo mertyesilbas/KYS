@@ -40,14 +40,30 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.077"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:srcCompat="@mipmap/ic_profile_photo_foreground" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/edit_profile_upload_btn"
+            tools:srcCompat="@mipmap/ic_profile_photo_foreground" />
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/profile_edit_photo_upload"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_profile_upload_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/profile_edit_photo_upload"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_profile_camera_btn"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:icon="@drawable/camera"
+                app:iconSize="@dimen/_23sdp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

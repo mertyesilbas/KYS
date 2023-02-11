@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.kys.R
 import com.example.kys.SignInActivity
@@ -15,8 +16,7 @@ import com.example.kys.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -54,14 +54,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         // FirebaseUser.getToken() instead.
         val uid = user.uid
         // [STOP access_user_info]
-        storageReference =
-            FirebaseStorage.getInstance().getReference("images/ic_profile_photo_round.png")
-        Log.d("STORAGE", storageReference.toString())
-        val localFile = File.createTempFile("image", "png")
-        storageReference.getFile(localFile).addOnSuccessListener {
-            binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(localFile.absolutePath))
-        }
-//        binding.profileImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.ic_profile_photo))
+
+        setProfileImage(uid)
+
+
+        Log.d("PHOTO URI", photoUrl.toString())
 
         binding.profileName.text = user.displayName.toString()
 
@@ -70,6 +67,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.profileUpdate.setOnClickListener {
             EditProfileDialog(
                 onSubmitClickListener = { username, photoUrl ->
+                    Log.d("PHOTO LOCAL URL", photoUrl.toString())
                     // Updating Firebase Auth
                     val profileUpdates = userProfileChangeRequest {
                         displayName = username
@@ -86,8 +84,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                             }
                         }
                     // Updating Firebase Database
-                    val userModel = User(username, email)
-                    database.child(uid).setValue(userModel)
+                    Log.d("NEW USERNAME", username)
+//                    val userModel = User(username, email)
+//                    database.child(uid).setValue(userModel)
+                    updateProfile(uid,username,email,photoUrl)
                     Toast.makeText(requireContext(), "Başarıyla Güncellendi", Toast.LENGTH_SHORT)
                         .show()
                     requireActivity()
@@ -95,6 +95,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         .replace(R.id.mainFrame, HomeFragment())
                         .commit()
                     requireActivity().bottom_navigation.selectedItemId = R.id.home
+
                 }
             ).show(parentFragmentManager, "dialog")
         }
@@ -107,6 +108,60 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
 
+    private fun setProfileImage(userUid: String) {
+        // Get Image Url From Database
+        val photoListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val photoUrl = snapshot.getValue()
+                Log.d("PHOTO URL", photoUrl.toString())
+                if (photoUrl == null) { // If user doesn't have an image show default image
+                    storageReference =
+                        FirebaseStorage.getInstance()
+                            .getReference("images/ic_profile_photo_round.png")
+                    Log.d("STORAGE", storageReference.toString())
+                    val localFile = File.createTempFile("image", "png")
+                    storageReference.getFile(localFile).addOnSuccessListener {
+                        binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(localFile.absolutePath))
+                    }
+                    binding.profileImageView.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.mipmap.ic_profile_photo
+                        )
+                    )
+                } else { // Show user's image
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        database.child(userUid).child("photoUrl").addValueEventListener(photoListener)
+//        if (imageUrl.getValue() == null){
+//            Log.d("PHOTO URL", imageUrl.getValue())
+//        }
+//        binding.profileImageView.setImageURI(photoUrl)
+    }
+
+    private fun updateProfile(userId: String?, username: String?, email: String?, photoUrl: String?){
+//        val key = database.push().key
+//        if (key == null){
+//            Log.w("PUSH KEY", "Couldn't get push key for users")
+//            return
+//        }
+
+        val user = User(userId,username,email,photoUrl)
+//        val userValues = user.toMap()
+//
+//        val childUpdates = hashMapOf<String, Any>(
+//            "$key" to userValues
+//        )
+//
+//        database.updateChildren(childUpdates)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
