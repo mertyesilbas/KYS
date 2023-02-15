@@ -72,13 +72,23 @@
     <string name="profile_mail">E-Posta Adresi</string>
     <string name="profile_change_name">İsim Değiştir</string>
     <string name="profile_change_photo">Fotoğrafı Değiştir</string>
-    <string name="profile_new_username">Yeni Kullanıcı Adı</string>
+    <!--    Edit Profile Dialog     -->
+    <string name="profile_edit">Profili Değiştir</string>
+    <string name="profile_edit_username">Kullanıcı Adı: </string>
+    <string name="profile_edit_photo">Fotoğraf: </string>
+    <string name="profile_edit_photo_upload">Yükle</string>
+    <string name="profile_edit_update">Güncelle</string>
     <!--    Home Strings        -->
     <string name="home_conferences">Konferanslar</string>
     <string name="home_conf_join">Katıl</string>
     <string name="home_conf_edit">Düzenle</string>
     <string name="home_conf_cancel">İptal Et</string>
     <string name="home_conf_details">Ayrıntılar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_profile">Update Profile</string>
 
-
+    <string name="temp_images_dir">temp_images</string>
+    <string name="temp_image">temp_image.jpg</string>
+    <string name="authorities">com.example.fileprovider</string>
 </resources>
