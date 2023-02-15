@@ -2,32 +2,37 @@ package com.example.kys.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.example.kys.R
 import com.example.kys.databinding.DialogEditProfileBinding
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
+@Suppress("DEPRECATION")
 class EditProfileDialog(
     private val onSubmitClickListener: (String, String) -> Unit
 ) : DialogFragment() {
     private lateinit var binding: DialogEditProfileBinding
     private lateinit var content: Uri
-    private lateinit var takenPicture: Uri
     private lateinit var storageReference: StorageReference
     private lateinit var database: DatabaseReference
 
@@ -36,33 +41,114 @@ class EditProfileDialog(
         storageReference = Firebase.storage.reference
         database = FirebaseDatabase.getInstance().getReference("Users")
         content = Uri.parse("")
-        takenPicture = Uri.parse("")
 
-        val getContent =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                content = uri!!
-                showNewProfileImage(content)
-            }
-        binding.editProfileUploadBtn.setOnClickListener {
-            getContent.launch("image/*")
-        }
+        // Profile Image
+        setProfileImage(Firebase.auth.currentUser!!.uid)
 
-        registerTakePictureLauncher(initTempUri())
+        registerGetContentLauncher()
+        registerTakePictureLauncher(initTempUri(Firebase.auth.uid!!))
 
+
+        // Profile Username
         binding.editProfileUsername.editText?.text =
             Editable.Factory.getInstance().newEditable(Firebase.auth.currentUser?.displayName)
 
-        setProfileImage(Firebase.auth.currentUser!!.uid)
+        return createBuilder()
 
+    }
+
+    private fun reduceImageSize(uri: Uri): Uri {
+        // Creating temp dir
+        val tempDir = File(requireContext().filesDir, getString(R.string.temp_images_dir))
+        tempDir.mkdir()
+        val tempFile = File(tempDir, "temp.jpg")
+        val bytes = ByteArrayOutputStream()
+        val fos = FileOutputStream(tempFile)
+
+        val bitmap: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val source = ImageDecoder.createSource(requireActivity().contentResolver, uri)
+            ImageDecoder.decodeBitmap(source)
+        } else {
+            MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
+        }
+
+        val newBitmap = Bitmap.createScaledBitmap(bitmap, 250, 250, false)
+        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val bitmapData = bytes.toByteArray()
+        fos.write(bitmapData)
+        fos.flush()
+        fos.close()
+        return Uri.fromFile(tempFile)
+    }
+
+    private fun setProfileImage(userUid: String) {
+        storageReference = Firebase.storage.reference
+        val imageStorageRef = storageReference.child("images/$userUid.jpg")
+        imageStorageRef.getBytes(1024 * 1024 * 1024).addOnSuccessListener {
+            val imageBitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+            binding.profileImageView.setImageBitmap(imageBitmap)
+        }
+    }
+
+    private fun showNewProfileImage(uri: Uri?) {
+        binding.profileImageView.setImageURI(uri)
+    }
+
+    private fun initTempUri(userUid: String): Uri {
+        val tempImagesDir = File(
+            requireContext().filesDir,
+            getString(R.string.temp_images_dir)
+        )
+
+        tempImagesDir.mkdir()
+
+        val tempImage = File(
+            tempImagesDir,
+            "$userUid.jpg"
+        )
+
+        return FileProvider.getUriForFile(
+            requireContext(),
+            getString(R.string.authorities),
+            tempImage
+        )
+    }
+
+    private fun registerGetContentLauncher() {
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                content = reduceImageSize(uri!!)
+                showNewProfileImage(content)
+                Log.d("CONTENT URI", content.toString())
+            }
+        binding.editProfileUploadBtn.setOnClickListener {
+            getContent.launch("image/jpeg")
+        }
+    }
+
+    private fun registerTakePictureLauncher(path: Uri) {
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+//            binding.profileImageView.setImageURI(null)
+//            binding.profileImageView.setImageURI(path)
+            content = reduceImageSize(path)
+            Log.d("CONTENT URI", content.toString())
+        }
+
+        binding.editProfileCameraBtn.setOnClickListener {
+            resultLauncher.launch(path)
+        }
+    }
+
+    private fun createBuilder(): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(binding.root)
-        builder.setPositiveButton("Güncelle") { dialog, it ->
+        builder.setPositiveButton("Güncelle") { _, _ ->
             onSubmitClickListener.invoke(
                 binding.editProfileUsername.editText?.text.toString(),
                 content.toString()
             )
         }
-        builder.setNegativeButton("İptal") { dialog, it -> }
+        builder.setNegativeButton("İptal") { _, _ -> }
 
         val dialog = builder.create()
 
@@ -74,73 +160,5 @@ class EditProfileDialog(
 
         dialog.window!!.attributes = layoutParameters
         return dialog
-    }
-
-    private fun setProfileImage(userUid: String) {
-        // Get Image Url From Database
-        val photoListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val photoUrl = snapshot.getValue()
-                Log.d("PHOTO URL", photoUrl.toString())
-                if (photoUrl == null) { // If user doesn't have an image show default image
-                    storageReference =
-                        FirebaseStorage.getInstance()
-                            .getReference("images/ic_profile_photo_round.png")
-                    Log.d("STORAGE", storageReference.toString())
-                    val localFile = File.createTempFile("image", "png")
-                    storageReference.getFile(localFile).addOnSuccessListener {
-                        binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(localFile.absolutePath))
-                    }
-                    binding.profileImageView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.mipmap.ic_profile_photo
-                        )
-                    )
-                } else { // Show user's image
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        }
-        database.child(userUid).child("photoUrl").addValueEventListener(photoListener)
-    }
-
-    private fun showNewProfileImage(uri: Uri?) {
-        binding.profileImageView.setImageURI(uri)
-    }
-
-    private fun initTempUri(): Uri {
-        val tempImagesDir = File(
-            requireContext().filesDir,
-            getString(R.string.temp_images_dir)
-        )
-
-        tempImagesDir.mkdir()
-
-        val tempImage = File(
-            tempImagesDir,
-            getString(R.string.temp_image)
-        )
-
-        return FileProvider.getUriForFile(
-            requireContext(),
-            getString(R.string.authorities),
-            tempImage
-        )
-    }
-
-    private fun registerTakePictureLauncher(path: Uri) {
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-            binding.profileImageView.setImageURI(null)
-            binding.profileImageView.setImageURI(path)
-        }
-
-        binding.editProfileCameraBtn.setOnClickListener {
-            resultLauncher.launch(path)
-        }
     }
 }
